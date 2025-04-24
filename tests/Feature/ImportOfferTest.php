@@ -8,7 +8,7 @@ use App\Listeners\ImportOffersRequestedListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 
-it('should be able to dispatch an event when import offer is requested', function () {
+it('should be able to dispatch an event when import offer is requested', function (): void {
     Event::fake();
 
     $response = $this->postJson(route('import.offer'));
@@ -19,7 +19,7 @@ it('should be able to dispatch an event when import offer is requested', functio
     Event::assertListening(ImportOffersRequestedEvent::class, ImportOffersRequestedListener::class);
 });
 
-it('should be able to push a job to the queue when import offer is requested', function () {
+it('should be able to push a job to the queue when import offer is requested', function (): void {
     Queue::fake();
 
     $response = $this->postJson(route('import.offer'));

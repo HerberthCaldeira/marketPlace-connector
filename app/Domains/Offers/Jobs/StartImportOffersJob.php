@@ -25,28 +25,27 @@ class StartImportOffersJob implements ShouldQueue
 
     public function handle(ImportOffersService $importOffersService): void
     {
-        logger('ImportOffersJob::handle', ['page' => $this->page]);
+        logger('StartImportOffersJob::handle', ['page' => $this->page]);
 
-        $pageOffers = $importOffersService->getAllOffersFromAPage($this->page);
-
-        $offers     = collect($pageOffers['data']['offers']);
+        $pageOffers = $importOffersService->getPage($this->page);
+     
         $pagination = $pageOffers['pagination'];
+        $totalPages = $pagination['total_pages'];
 
-        if ($offers->isNotEmpty()) {
-            Bus::batch($offers->map(fn ($offer): ImportOfferJob => new ImportOfferJob($offer)))->then(function (): void {
-                logger('Batch success.');
-            })->catch(function (): void {
-                logger('Batch failed.');
-            })->finally(function (): void {
-                logger('Batch finished.');
-            })->dispatch();
+        $batchJobs = [];
+
+        for ($this->page; $this->page <= $totalPages; $this->page++) {
+            $batchJobs[] = new ImportPageOffersJob($this->page);
         }
 
-        $nextPage = $this->page + 1;
+        Bus::batch($batchJobs)->then(function (): void {
+            logger('ImportPageOffersJob::Batch success.');
+        })->catch(function (): void {
+            logger('ImportPageOffersJob::Batch failed.');
+        })->finally(function (): void {
+            logger('ImportPageOffersJob::Batch finished.');
+        })->dispatch();
 
-        if ($pagination['total_pages'] > $this->page) {
-            StartImportOffersJob::dispatch($nextPage);
-        }
 
     }
 

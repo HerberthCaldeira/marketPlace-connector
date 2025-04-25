@@ -26,7 +26,7 @@ class SendOfferToHubJob implements ShouldQueue
     public function handle(HubService $hubService): void
     {
         logger('Send offer to hub', ['data' => $this->data]);
-        $hubService->sendOffer([]);
+        $hubService->sendOffer($this->data);
     }
 
     public function failed($exception): void

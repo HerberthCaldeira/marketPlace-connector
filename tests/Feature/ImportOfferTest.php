@@ -38,7 +38,7 @@ it('should be able to get a concret class from a typehint interface', function (
 
 it('should be able to get offers from marketplace', function (): void {
     $marketingPlaceClient = app(IMarketingPlaceClient::class);
-    $offers               = $marketingPlaceClient->getPage(1);   
+    $offers               = $marketingPlaceClient->getPage(1);
     expect($offers)->toBeArray();
 });
 

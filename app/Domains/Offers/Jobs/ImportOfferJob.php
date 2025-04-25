@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Domains\Offers\Jobs;
 
-use App\Domains\Hub\Jobs\SendOfferToHubJob;
 use App\Domains\Offers\Services\ImportOffersService;
 use App\Models\ImportTaskOffer;
 use Illuminate\Bus\Batchable;
@@ -31,7 +30,7 @@ class ImportOfferJob implements ShouldQueue
     {
         logger("ImportOfferJob::handle::{$this->importTaskOffer->reference}");
         $data = $importOffersService->getOffer($this->importTaskOffer->reference);
-        $this->importTaskOffer->update(['payload' => $data['data'], 'status' => 'fetched']);   
+        $this->importTaskOffer->update(['payload' => $data['data'], 'status' => 'fetched']);
     }
 
     public function failed($exception): void

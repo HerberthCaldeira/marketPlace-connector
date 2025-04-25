@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Log;
 
 class SendOfferToHubJob implements ShouldQueue
 {
-    use Queueable, Batchable;
+    use Queueable;
+    use Batchable;
 
     /**
      * Create a new job instance.
@@ -26,7 +27,7 @@ class SendOfferToHubJob implements ShouldQueue
      * Execute the job.
      */
     public function handle(HubService $hubService): void
-    {        
+    {
         $hubService->sendOffer($this->importTaskOffer->payload);
         $this->importTaskOffer->update(['status' => 'completed']);
     }

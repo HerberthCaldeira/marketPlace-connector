@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -19,10 +21,10 @@ class ImportTaskOffer extends Model
     ];
 
     protected $casts = [
-        'payload' => 'array',
-        'started_at' => 'datetime',
+        'payload'     => 'array',
+        'started_at'  => 'datetime',
         'finished_at' => 'datetime',
-        'failed_at' => 'datetime',
+        'failed_at'   => 'datetime',
     ];
 
     public function page(): BelongsTo

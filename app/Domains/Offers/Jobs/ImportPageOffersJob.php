@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Log;
 
 class ImportPageOffersJob implements ShouldQueue
 {
-    use Queueable, Batchable;
+    use Queueable;
+    use Batchable;
 
     /**
      * Create a new job instance.
@@ -25,8 +26,7 @@ class ImportPageOffersJob implements ShouldQueue
     public function __construct(
         public ImportTask $importTask,
         public ImportTaskPage $importTaskPage
-    )
-    {
+    ) {
         //
     }
 
@@ -39,27 +39,28 @@ class ImportPageOffersJob implements ShouldQueue
 
         $pageOffers = $importOffersService->getPage($this->importTaskPage->page_number);
 
-        $offers     = collect($pageOffers['data']['offers']);
+        $offers = collect($pageOffers['data']['offers']);
 
         $chainJobs = [];
+
         foreach ($offers as $offer) {
             $importTaskOffer = ImportTaskOffer::create([
-                'import_task_id' => $this->importTask->id,
+                'import_task_id'      => $this->importTask->id,
                 'import_task_page_id' => $this->importTaskPage->id,
-                'reference' => $offer,
-                'status' => 'pending',
+                'reference'           => $offer,
+                'status'              => 'pending',
             ]);
 
             $chainJobs[] = [
                 new ImportOfferJob($importTaskOffer),
-                new SendOfferToHubJob($importTaskOffer)
+                new SendOfferToHubJob($importTaskOffer),
             ];
         }
 
         if ($offers->isNotEmpty()) {
-            $importTaskPage = $this->importTaskPage; 
-        
-            Bus::batch($chainJobs)       
+            $importTaskPage = $this->importTaskPage;
+
+            Bus::batch($chainJobs)
                 ->then(function () use ($importTaskPage): void {
                     $importTaskPage->update(['status' => 'completed']);
                     logger('ImportPageOffersJob::Batch success.', ['importTaskPageId' => $importTaskPage->id, 'page_number' => $importTaskPage->page_number]);
@@ -71,7 +72,6 @@ class ImportPageOffersJob implements ShouldQueue
                     logger('ImportPageOffersJob::Batch finished.', ['importTaskPageId' => $importTaskPage->id, 'page_number' => $importTaskPage->page_number]);
                 })->dispatch();
         }
-          
     }
 
     public function failed($exception): void
@@ -87,6 +87,6 @@ class ImportPageOffersJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['ImportTask::' . $this->importTask->id, 'ImportPageOffersJob::' . $this->importTaskPage->page_number ];
+        return ['ImportTask::' . $this->importTask->id, 'ImportPageOffersJob::' . $this->importTaskPage->page_number];
     }
 }

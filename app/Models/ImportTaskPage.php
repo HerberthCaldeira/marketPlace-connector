@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +20,9 @@ class ImportTaskPage extends Model
     ];
 
     protected $casts = [
-        'started_at' => 'datetime',
+        'started_at'  => 'datetime',
         'finished_at' => 'datetime',
-        'failed_at' => 'datetime',
+        'failed_at'   => 'datetime',
     ];
 
     public function importTask(): BelongsTo

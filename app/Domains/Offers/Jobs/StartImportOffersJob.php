@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Offers\Services\ImportOffersService;
+use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -19,31 +20,44 @@ class StartImportOffersJob implements ShouldQueue
     use Queueable;
     use Batchable;
 
-    public function __construct(public ?int $page = 1)
+    public function __construct(public ImportTask $importTask, public ?int $page = 1)
     {
     }
 
     public function handle(ImportOffersService $importOffersService): void
-    {
-        logger('StartImportOffersJob::handle', ['page' => $this->page]);
+    {   
 
-        $pageOffers = $importOffersService->getPage($this->page);
-     
+        $pageOffers = $importOffersService->getPage($this->page);     
         $pagination = $pageOffers['pagination'];
         $totalPages = $pagination['total_pages'];
 
-        $batchJobs = [];
+        logger('StartImportOffersJob::handle', ['page' => $this->page, 'totalPages' => $totalPages]);
 
+        $batchJobs = [];
         for ($this->page; $this->page <= $totalPages; $this->page++) {
-            $batchJobs[] = new ImportPageOffersJob($this->page);
+
+            $importTaskPage = $this->importTask->pages()->create([
+                'import_task_id' => $this->importTask->id,
+                'page_number' => $this->page,
+                'status' => 'pending',
+            ]);
+
+            $batchJobs[] = new ImportPageOffersJob($this->importTask, $importTaskPage, $this->page);
+
         }
 
-        Bus::batch($batchJobs)->then(function (): void {
-            logger('ImportPageOffersJob::Batch success.');
-        })->catch(function (): void {
-            logger('ImportPageOffersJob::Batch failed.');
-        })->finally(function (): void {
-            logger('ImportPageOffersJob::Batch finished.');
+        $importTask = $this->importTask;
+
+        Bus::batch($batchJobs)
+        ->then(function () use ($importTask):  void {
+            $importTask->update(['status' => 'completed']);
+            logger('StartImportOffersJob::Batch success.', ['importTaskId' => $importTask->id]);
+        })->catch(function () use ($importTask): void {
+            $importTask->update(['status' => 'failed']);
+            logger('StartImportOffersJob::Batch failed.', ['importTaskId' => $importTask->id]);
+        })->finally(function () use ($importTask): void {
+            $importTask->update(['finished_at' => now()]);
+            logger('StartImportOffersJob::Batch finished.', ['importTaskId' => $importTask->id]);
         })->dispatch();
 
 
@@ -51,16 +65,18 @@ class StartImportOffersJob implements ShouldQueue
 
     public function failed($exception): void
     {
+        $this->importTask->update(['status' => 'failed', 'finished_at' => now()]);
         Log::error(
             'StartImportOffersJob::Error importing offers from marketplace.',
             [
-                'error' => $exception->getMessage(),
+                'importTaskId' => $this->importTask->id,
+                'error' => $exception->getMessage()
             ]
         );
     }
 
     public function tags(): array
     {
-        return ['StartImportOffersJob::page::' . $this->page];
+        return ['StartImportOffersJob::importTask::' . $this->importTask->id];
     }
 }

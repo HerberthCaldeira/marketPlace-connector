@@ -7,7 +7,7 @@ namespace App\Providers;
 use App\Domains\Hub\Contracts\IHubClient;
 use App\Domains\Offers\Contracts\IMarketingPlaceClient;
 use App\Infrastructure\Hub\HubClient;
-use App\Infrastructure\Marketplace\MarketPlaceClient;
+use App\Infrastructure\Marketplace\MarketingPlaceClient;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
-        $this->app->bind(IMarketingPlaceClient::class, MarketPlaceClient::class);
+        $this->app->bind(IMarketingPlaceClient::class, MarketingPlaceClient::class);
         $this->app->bind(IHubClient::class, HubClient::class);
     }
 

@@ -6,6 +6,7 @@ namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Hub\Jobs\SendOfferToHubJob;
 use App\Domains\Offers\Services\ImportOffersService;
+use App\Models\ImportTaskOffer;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -19,7 +20,7 @@ class ImportOfferJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public string $offerId)
+    public function __construct(public ImportTaskOffer $importTaskOffer)
     {
     }
 
@@ -28,13 +29,14 @@ class ImportOfferJob implements ShouldQueue
      */
     public function handle(ImportOffersService $importOffersService): void
     {
-        logger("ImportOfferJob::handle::{$this->offerId}");
-        $data = $importOffersService->getOffer($this->offerId);
-        SendOfferToHubJob::dispatch($data['data'], $this->offerId);
+        logger("ImportOfferJob::handle::{$this->importTaskOffer->reference}");
+        $data = $importOffersService->getOffer($this->importTaskOffer->reference);
+        $this->importTaskOffer->update(['payload' => $data['data'], 'status' => 'fetched']);   
     }
 
     public function failed($exception): void
     {
+        $this->importTaskOffer->update(['status' => 'failed']);
         Log::error(
             'ImportOfferJob::Error importing offer from marketplace.',
             [
@@ -45,6 +47,6 @@ class ImportOfferJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['batch::' . $this->batchId, 'offer::' . $this->offerId];
+        return ['ImportTask::' . $this->importTaskOffer->import_task_id, 'ImportTaskPage::' . $this->importTaskOffer->import_task_page_id, 'ImportOfferJob::' . $this->importTaskOffer->reference];
     }
 }

@@ -6,6 +6,7 @@ namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\StartImportOffersJob;
 use App\Events\ImportOffersRequestedEvent;
+use App\Models\ImportTask;
 
 class ImportOffersRequestedListener
 {
@@ -22,7 +23,10 @@ class ImportOffersRequestedListener
      */
     public function handle(ImportOffersRequestedEvent $event): void
     {
-        StartImportOffersJob::dispatch();
-        logger('Import offers job dispatched');
+        //create as status padding
+        $importTask = ImportTask::create();
+
+        logger('Starting import', ['importTaskId' => $importTask->id]);
+        StartImportOffersJob::dispatch($importTask);
     }
 }

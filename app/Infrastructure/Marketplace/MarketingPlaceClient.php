@@ -9,7 +9,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-final class MarketPlaceClient implements IMarketingPlaceClient
+final class MarketingPlaceClient implements IMarketingPlaceClient
 {
     public PendingRequest $api;
 

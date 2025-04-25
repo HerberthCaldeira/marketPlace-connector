@@ -16,6 +16,14 @@ return [
     |
     */
 
+    'marketplace' => [
+        'url' => env('MARKETPLACE_URL'),
+    ],
+
+    'hub' => [
+        'url' => env('HUB_URL'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],

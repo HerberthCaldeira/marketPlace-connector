@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Listeners;
 
-use App\Domains\Offers\Jobs\ImportOffersJob;
+use App\Domains\Offers\Jobs\StartImportOffersJob;
 use App\Events\ImportOffersRequestedEvent;
 
 class ImportOffersRequestedListener
@@ -22,6 +22,7 @@ class ImportOffersRequestedListener
      */
     public function handle(ImportOffersRequestedEvent $event): void
     {
-        ImportOffersJob::dispatch();
+        StartImportOffersJob::dispatch();
+        logger('Import offers job dispatched');
     }
 }

@@ -16,9 +16,9 @@ class ImportOffersService
     ) {
     }
 
-    public function getAllOffersFromAPage(int $page): array
+    public function getPage(int $page): array
     {
-        return $this->marketingPlaceClient->getAllOffersFromAPage($page);
+        return $this->marketingPlaceClient->getPage($page);
     }
 
     public function getOffer(string $offerId): array

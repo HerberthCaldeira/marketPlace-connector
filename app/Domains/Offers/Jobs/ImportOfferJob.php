@@ -30,7 +30,7 @@ class ImportOfferJob implements ShouldQueue
     {
         logger("ImportOfferJob::handle::{$this->offerId}");
         $data = $importOffersService->getOffer($this->offerId);
-        SendOfferToHubJob::dispatch($data['data']);
+        SendOfferToHubJob::dispatch($data['data'], $this->offerId);
     }
 
     public function failed($exception): void
@@ -45,6 +45,6 @@ class ImportOfferJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['offers::' . $this->batchId];
+        return ['batch::' . $this->batchId, 'offer::' . $this->offerId];
     }
 }

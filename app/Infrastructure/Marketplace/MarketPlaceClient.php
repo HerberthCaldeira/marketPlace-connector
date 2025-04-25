@@ -23,7 +23,7 @@ final class MarketPlaceClient implements IMarketingPlaceClient
             ->asJson();
     }
 
-    public function getAllOffersFromAPage(int $page): array
+    public function getPage(int $page): array
     {
         try {
             $response = $this->api->withQueryParameters([

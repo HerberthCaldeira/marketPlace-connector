@@ -16,7 +16,7 @@ class SendOfferToHubJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(public array $data)
+    public function __construct(public array $data, public string $offerId)
     {
     }
 
@@ -36,6 +36,6 @@ class SendOfferToHubJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['SendOfferToHubJob'];
+        return ['SendOfferToHubJob::offerId::' . $this->offerId];
     }
 }

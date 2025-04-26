@@ -13,9 +13,7 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * It's responsible for dispatching the event to send the offer to the hub.
- * 
- * @param ImportTaskOffer $importTaskOffer
- * 
+ *  
  * @see App\Listeners\SendOfferToHubListener
  */
 class SendOfferToHubEvent
@@ -24,6 +22,9 @@ class SendOfferToHubEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTaskOffer $importTaskOffer
+     * 
      */
     public function __construct(public ImportTaskOffer $importTaskOffer)
     {

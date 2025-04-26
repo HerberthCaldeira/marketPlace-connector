@@ -11,6 +11,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * It's responsible for sending an offer to the hub.
+ * 
+ * @param ImportTaskOffer $importTaskOffer
+ * 
+ */
 class SendOfferToHubJob implements ShouldQueue
 {
     use Queueable;

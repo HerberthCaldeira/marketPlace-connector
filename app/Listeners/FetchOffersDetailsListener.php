@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\Bus;
  * It's responsible for dispatching the job to fetch all the offers details from a page.
  * It will use a batch strategy to fetch all offers details from a page.
  * 
- * @param ImportTaskPage $importTaskPage
  * 
- * @see FetchOfferDetailJob
- * @see SendOfferToHubJob
  */
 class FetchOffersDetailsListener
 {
@@ -30,6 +27,9 @@ class FetchOffersDetailsListener
 
     /**
      * Handle the event.
+     * 
+     * @param FetchOffersDetailsEvent $event
+     * 
      */
     public function handle(FetchOffersDetailsEvent $event): void
     {

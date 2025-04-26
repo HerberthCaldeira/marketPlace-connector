@@ -13,6 +13,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 /**
  * It's responsible for dispatching the event to fetch the offers from all pages of the import task. 
+ * 
  * @see App\Listeners\FetchPagesOffersListener
  */
 class FetchPagesOffersEvent
@@ -21,6 +22,9 @@ class FetchPagesOffersEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTask $importTask
+     * 
      */
     public function __construct(
         public ImportTask $importTask        

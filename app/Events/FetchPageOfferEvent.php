@@ -14,8 +14,6 @@ use Illuminate\Queue\SerializesModels;
 /**
  * It's responsible for dispatching the event to fetch the offers from a single page.
  * 
- * @param ImportTaskPage $importTaskPage
- * 
  * @see App\Listeners\FetchPageOfferListener
  * 
  */
@@ -25,6 +23,9 @@ class FetchPageOfferEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTaskPage $importTaskPage
+     * 
      */
     public function __construct(
         public ImportTaskPage $importTaskPage        

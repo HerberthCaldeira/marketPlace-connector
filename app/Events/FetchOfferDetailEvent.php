@@ -14,8 +14,6 @@ use Illuminate\Queue\SerializesModels;
 /**
  * It's responsible for dispatching the event to fetch the details of an single offer from the marketplace.
  * 
- * @param ImportTaskOffer $importTaskOffer
- * 
  * @see App\Listeners\FetchOfferDetailListener
  * 
  */
@@ -25,6 +23,9 @@ class FetchOfferDetailEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTaskOffer $importTaskOffer
+     * 
      */
     public function __construct(public ImportTaskOffer $importTaskOffer)
     {

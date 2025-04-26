@@ -23,9 +23,8 @@ class FetchPageOfferListener
     /**
      * Handle the event.
      * 
-     * @param ImportTaskPage $importTaskPage
+     * @param FetchPageOfferEvent $event
      * 
-     * @see FetchPageOffersJob
      */
     public function handle(FetchPageOfferEvent $event): void
     {

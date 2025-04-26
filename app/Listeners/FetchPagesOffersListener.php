@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Bus;
 
 /**
  * It dispatches jobs to fetch offers from all pages of the import task using a batch strategy.
- * 
- * @param ImportTask $importTask
- * 
- * @see FetchPageOffersJob
+ *  
  */
 class FetchPagesOffersListener
 {
@@ -25,6 +22,9 @@ class FetchPagesOffersListener
 
     /**
      * Handle the event.
+     * 
+     * @param FetchPagesOffersEvent $event
+     * 
      */
     public function handle(FetchPagesOffersEvent $event): void
     {

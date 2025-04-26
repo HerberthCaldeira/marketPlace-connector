@@ -13,8 +13,6 @@ use Illuminate\Queue\SerializesModels;
 /**
  * It's responsible for dispatching the event to fetch the details of an offer from the marketplace.
  * 
- * @param ImportTaskPage $importTaskPage
- * 
  * @see App\Listeners\FetchOffersDetailsListener
  * 
  */
@@ -24,6 +22,9 @@ class FetchOffersDetailsEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTaskPage $importTaskPage
+     * 
      */
     public function __construct(public ImportTaskPage $importTaskPage)
     {

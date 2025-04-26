@@ -6,7 +6,12 @@ use App\Domains\Hub\Jobs\SendOfferToHubJob;
 use App\Events\SendOfferToHubEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-
+/**
+ * It's responsible for dispatching the job to send an offer to the hub.
+ * 
+ * @param ImportTaskOffer $importTaskOffer
+ * 
+ */
 class SendOfferToHubListener
 {
     /**

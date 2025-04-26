@@ -11,6 +11,11 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * It's responsible for dispatching the event to start the import of offers.
+ * 
+ * @see App\Listeners\StartImportOffersListener
+ */
 class StartImportOffersEvent
 {
     use Dispatchable;
@@ -19,6 +24,9 @@ class StartImportOffersEvent
 
     /**
      * Create a new event instance.
+     * 
+     * @param ImportTask $importTask
+     * 
      */
     public function __construct(public ImportTask $importTask)
     {

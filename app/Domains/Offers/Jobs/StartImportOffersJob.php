@@ -5,15 +5,20 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Offers\Services\ImportOffersService;
+use App\Events\FetchPageOffersEvent;
 use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 
 /**
- * It's responsible for importing offers from the marketplace.
+ * It's responsible for discover how many pages of offers should be imported and dispatch the event to fetch them.
+ * 
+ * @param ImportTask $importTask
+ * @param int $page
+ * @see App\Listeners\FetchPageOffersListener
+ * 
  */
 class StartImportOffersJob implements ShouldQueue
 {
@@ -24,39 +29,32 @@ class StartImportOffersJob implements ShouldQueue
     {
     }
 
+    /**
+     * Execute the job.
+     * 
+     * @param ImportOffersService $importOffersService
+     * @see App\Listeners\FetchPageOffersListener
+     */
     public function handle(ImportOffersService $importOffersService): void
     {
         $pageOffers = $importOffersService->getPage($this->page);
         $pagination = $pageOffers['pagination'];
         $totalPages = $pagination['total_pages'];
 
-        logger('StartImportOffersJob::handle', ['page' => $this->page, 'totalPages' => $totalPages]);
-
-        $batchJobs = [];
+        logger('StartImportOffersJob::Discover total pages', ['page' => $this->page, 'totalPages' => $totalPages]);
 
         for ($this->page; $this->page <= $totalPages; $this->page++) {
-            $importTaskPage = $this->importTask->pages()->create([
+            $this->importTask->pages()->create([
                 'import_task_id' => $this->importTask->id,
                 'page_number'    => $this->page,
                 'status'         => 'pending',
             ]);
-
-            $batchJobs[] = new ImportPageOffersJob($this->importTask, $importTaskPage, $this->page);
         }
 
-        $importTask = $this->importTask;
-
-        Bus::batch($batchJobs)
-            ->then(function () use ($importTask): void {
-                $importTask->update(['status' => 'completed']);
-                logger('StartImportOffersJob::Batch success.', ['importTaskId' => $importTask->id]);
-            })->catch(function () use ($importTask): void {
-                $importTask->update(['status' => 'failed']);
-                logger('StartImportOffersJob::Batch failed.', ['importTaskId' => $importTask->id]);
-            })->finally(function () use ($importTask): void {
-                $importTask->update(['finished_at' => now()]);
-                logger('StartImportOffersJob::Batch finished.', ['importTaskId' => $importTask->id]);
-            })->dispatch();
+        /**
+         * @see App\Listeners\FetchPageOffersListener
+         */
+        event(new FetchPageOffersEvent($this->importTask));
     }
 
     public function failed($exception): void

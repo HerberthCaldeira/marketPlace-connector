@@ -28,6 +28,7 @@ class SendOfferToHubJob implements ShouldQueue
      */
     public function handle(HubService $hubService): void
     {
+        logger("SendOfferToHubJob::Send offer to hub::{$this->importTaskOffer->reference}");
         $hubService->sendOffer($this->importTaskOffer->payload);
         $this->importTaskOffer->update(['status' => 'completed']);
     }

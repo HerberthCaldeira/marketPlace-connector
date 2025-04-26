@@ -14,9 +14,9 @@ use Illuminate\Queue\SerializesModels;
 /**
  * It's responsible for dispatching the event to fetch the offers from all pages of the import task. 
  * 
- * @see App\Listeners\FetchPagesOffersListener
+ * @see App\Listeners\FetchPagesListener
  */
-class FetchPagesOffersEvent
+class FetchPagesEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

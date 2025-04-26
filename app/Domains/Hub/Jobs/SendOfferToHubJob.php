@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Hub\Jobs;
 
 use App\Domains\Hub\Services\HubService;
+use App\Domains\Offers\States\SentToHubState;
 use App\Models\ImportTaskOffer;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -42,6 +43,7 @@ class SendOfferToHubJob implements ShouldQueue
         logger("SendOfferToHubJob::Send offer to hub::{$this->importTaskOffer->reference}");
         $hubService->sendOffer($this->importTaskOffer->payload);
         $this->importTaskOffer->update(['status' => 'completed']);
+        $this->importTaskOffer->setState(new SentToHubState($this->importTaskOffer));
     }
 
     /**

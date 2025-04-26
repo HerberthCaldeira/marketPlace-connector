@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Offers\Services\OffersService;
-use App\Events\FetchPagesOffersEvent;
+use App\Events\FetchPagesEvent;
 use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * It's responsible for discover how many pages of offers should be imported and dispatch the event to fetch them.
  * 
- * @see App\Listeners\FetchPagesOffersListener
+ * @see App\Listeners\FetchPagesListener
  * 
  */
 class StartImportOffersJob implements ShouldQueue
@@ -30,15 +30,17 @@ class StartImportOffersJob implements ShouldQueue
      * @param int $page
      * 
      */
-    public function __construct(public ImportTask $importTask, public ?int $page = 1)
-    {
+    public function __construct(
+        public ImportTask $importTask,
+        public ?int $page = 1
+    ) {
     }
 
     /**
      * Execute the job.
      * 
      * @param OffersService $offersService
-     * @see App\Listeners\FetchPagesOffersListener
+     * @see App\Listeners\FetchPagesListener
      */
     public function handle(OffersService $offersService): void
     {
@@ -57,9 +59,9 @@ class StartImportOffersJob implements ShouldQueue
         }
 
         /**
-         * @see App\Listeners\FetchPagesOffersListener
+         * @see App\Listeners\FetchPagesListener
          */
-        event(new FetchPagesOffersEvent($this->importTask));
+        event(new FetchPagesEvent($this->importTask));
     }
 
     public function failed($exception): void

@@ -3,14 +3,14 @@
 namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\FetchPageOffersJob;
-use App\Events\FetchPagesOffersEvent;
+use App\Events\FetchPagesEvent;
 use Illuminate\Support\Facades\Bus;
 
 /**
  * It dispatches jobs to fetch offers from all pages of the import task using a batch strategy.
  *  
  */
-class FetchPagesOffersListener
+class FetchPagesListener
 {
     /**
      * Create the event listener.
@@ -23,12 +23,12 @@ class FetchPagesOffersListener
     /**
      * Handle the event.
      * 
-     * @param FetchPagesOffersEvent $event
+     * @param FetchPagesEvent $event
      * 
      */
-    public function handle(FetchPagesOffersEvent $event): void
+    public function handle(FetchPagesEvent $event): void
     {
-        logger('FetchPageOffersListener::Fetch pages offers using batch strategy', ['importTaskId' => $event->importTask->id]);
+        logger('FetchPagesListener::Fetch pages offers using batch strategy', ['importTaskId' => $event->importTask->id]);
 
         $batchJobs = [];
         $importTask = $event->importTask;
@@ -42,13 +42,13 @@ class FetchPagesOffersListener
         Bus::batch($batchJobs)
             ->then(function () use ($importTask): void {
                 $importTask->update(['status' => 'completed']);
-                logger('StartImportOffersJob::Batch success.', ['importTaskId' => $importTask->id]);
+                logger('FetchPageOffersJob::Batch success.', ['importTaskId' => $importTask->id]);
             })->catch(function () use ($importTask): void {
                 $importTask->update(['status' => 'failed']);
-                logger('StartImportOffersJob::Batch failed.', ['importTaskId' => $importTask->id]);
+                logger('FetchPagesListener::Batch failed.', ['importTaskId' => $importTask->id]);
             })->finally(function () use ($importTask): void {
                 $importTask->update(['finished_at' => now()]);
-                logger('StartImportOffersJob::Batch finished.', ['importTaskId' => $importTask->id]);
+                logger('FetchPagesListener::Batch finished.', ['importTaskId' => $importTask->id]);
             })->dispatch();
     }
 }

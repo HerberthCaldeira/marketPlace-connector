@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Offers\Services\OffersService;
-use App\Events\SendOfferToHubEvent;
+use App\Domains\Offers\States\FetchedState;
 use App\Models\ImportTaskOffer;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Log;
  */
 class FetchOfferDetailJob implements ShouldQueue
 {
-    use  Batchable;
+    use Batchable;
     use Queueable;
 
     /**
@@ -42,18 +42,23 @@ class FetchOfferDetailJob implements ShouldQueue
     public function handle(OffersService $offersService): void
     {
         logger("FetchOfferDetailJob::handle::{$this->importTaskOffer->reference}");
-        $data = $offersService->getOffer($this->importTaskOffer->reference);
-        $this->importTaskOffer->update(['payload' => $data['data'], 'status' => 'fetched']);
-
-        /**
-         * @see App\Listeners\SendOfferToHubListener
-         */
-        event(new SendOfferToHubEvent($this->importTaskOffer));
+        
+        try {
+            $data = $offersService->getOffer($this->importTaskOffer->reference);
+            $this->importTaskOffer->update([
+                'payload' => $data['data'],
+                'status' => 'fetched'
+            ]);
+            $this->importTaskOffer->setState(new FetchedState($this->importTaskOffer));
+            $this->importTaskOffer->sendToHub();
+        } catch (\Exception $e) {
+            $this->failed($e);
+        }
     }
 
     public function failed($exception): void
     {
-        $this->importTaskOffer->update(['status' => 'failed']);
+        $this->importTaskOffer->fail($exception->getMessage());
         Log::error(
             'FetchOfferDetailJob::Error importing offer from marketplace.',
             [

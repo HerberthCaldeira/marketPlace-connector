@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * It's responsible for discover how many pages of offers should be imported and dispatch the event to fetch them.
- * 
+ *
  * @see App\Listeners\FetchPagesListener
- * 
+ *
  */
 class StartImportOffersJob implements ShouldQueue
 {
@@ -25,10 +25,10 @@ class StartImportOffersJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * 
+     *
      * @param ImportTask $importTask
      * @param int $page
-     * 
+     *
      */
     public function __construct(
         public ImportTask $importTask,
@@ -38,7 +38,7 @@ class StartImportOffersJob implements ShouldQueue
 
     /**
      * Execute the job.
-     * 
+     *
      * @param OffersService $offersService
      * @see App\Listeners\FetchPagesListener
      */

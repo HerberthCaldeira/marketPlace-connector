@@ -1,17 +1,13 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Offers\States;
-
+/**
+ * Implements the state pattern for failed offers.
+ */
 class FailedState extends OfferState
-{
-    public function fetch(): void
-    {
-        // Can retry fetch
-        $this->offer->setState(new PendingState($this->offer));
-        $this->offer->getState()->fetch();
-    }
+{    
 
     public function sendToHub(): void
     {

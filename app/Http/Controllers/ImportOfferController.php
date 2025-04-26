@@ -4,17 +4,15 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
-use App\Events\FetchPageOfferEvent;
 use App\Events\StartImportOffersEvent;
 use App\Models\ImportTask;
-use App\Models\ImportTaskPage;
 use Illuminate\Http\Request;
 
 /**
  * It's responsible for starting the import process.
- * 
+ *
  * @param Request $request
- * 
+ *
  * @see StartImportOffersListener
  */
 class ImportOfferController extends Controller
@@ -22,7 +20,7 @@ class ImportOfferController extends Controller
     public function __invoke(Request $request)
     {
         //create as status pending
-        $importTask = ImportTask::create();     
+        $importTask = ImportTask::create();
 
         /**
          * Dispatch the event to start the import process

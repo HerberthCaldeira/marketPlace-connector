@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * It's responsible for making the requests to the hub.
- * 
+ *
  * @see App\Infrastructure\Hub\Contracts\IHubClient
  */
 class HubClient implements IHubClient
 {
     /**
      * It's responsible for making the requests to the hub.
-     * 
+     *
      * @var PendingRequest
      */
     public PendingRequest $api;
@@ -32,11 +32,12 @@ class HubClient implements IHubClient
             ])
             ->asJson();
     }
+
     /**
      * It's responsible for sending an offer to the hub.
-     * 
+     *
      * @param array $data
-     * 
+     *
      */
     public function sendOffer(array $data): array
     {

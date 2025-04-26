@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Listeners;
 
-use App\Domains\Hub\Jobs\SendOfferToHubJob;
 use App\Domains\Offers\Jobs\FetchOfferDetailJob;
 use App\Events\FetchOffersDetailsEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Bus;
 
 /**
  * It's responsible for dispatching the job to fetch all the offers details from a page.
  * It will use a batch strategy to fetch all offers details from a page.
- * 
- * 
+ *
+ *
  */
 class FetchOffersDetailsListener
 {
@@ -27,15 +26,15 @@ class FetchOffersDetailsListener
 
     /**
      * Handle the event.
-     * 
+     *
      * @param FetchOffersDetailsEvent $event
-     * 
+     *
      */
     public function handle(FetchOffersDetailsEvent $event): void
     {
         logger('FetchOffersDetailsListener::Fetch offers details using batch', ['importTaskPageId' => $event->importTaskPage->id, 'page_number' => $event->importTaskPage->page_number]);
         $importTaskPage = $event->importTaskPage;
-        $offers = $importTaskPage->offers()->get();
+        $offers         = $importTaskPage->offers()->get();
 
         $batchJobs = [];
 

@@ -8,15 +8,16 @@ use App\Domains\Offers\Contracts\IMarketingPlaceClient;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+
 /**
  * It's responsible for making the requests to the marketplace.
- 
+
  */
 final class MarketingPlaceClient implements IMarketingPlaceClient
 {
     /**
      * It's responsible for making the requests to the marketplace.
-     * 
+     *
      * @var PendingRequest
      */
     public PendingRequest $api;
@@ -33,9 +34,9 @@ final class MarketingPlaceClient implements IMarketingPlaceClient
 
     /**
      * It's responsible for getting a page of offers from the marketplace.
-     * 
+     *
      * @param int $page
-     * 
+     *
      */
     public function getPage(int $page): array
     {
@@ -61,9 +62,9 @@ final class MarketingPlaceClient implements IMarketingPlaceClient
 
     /**
      * It's responsible for getting an offer details from the marketplace.
-     * 
+     *
      * @param string $offerId
-     * 
+     *
      */
     public function getOffer(string $offerId): array
     {

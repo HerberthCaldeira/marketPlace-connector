@@ -9,6 +9,21 @@ use App\Domains\Offers\States\PendingState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Implements the import task offer model.
+ * @property int $id
+ * @property int $import_task_id
+ * @property int $import_task_page_id
+ * @property string $reference
+ * @property string $status
+ * @property array $payload
+ * @property \DateTime $started_at
+ * @property \DateTime $finished_at
+ * @property \DateTime $failed_at
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at 
+ * 
+ */
 class ImportTaskOffer extends Model
 {
     protected $fillable = [
@@ -38,9 +53,10 @@ class ImportTaskOffer extends Model
 
     public function getState(): OfferState
     {
-        if ($this->state === null) {
+        if (!$this->state instanceof \App\Domains\Offers\States\OfferState) {
             $this->state = new PendingState($this);
         }
+
         return $this->state;
     }
 
@@ -48,7 +64,7 @@ class ImportTaskOffer extends Model
     {
         $this->state = $state;
     }
-   
+
     public function sendToHub(): void
     {
         $this->getState()->sendToHub();

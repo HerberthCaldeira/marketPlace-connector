@@ -11,7 +11,7 @@ class OffersService
     public function __construct(
         /**
          * @var IMarketingPlaceClient
-         * 
+         *
          * @see App\Infrastructure\Marketplace\MarketingPlaceClient
          */
         private readonly IMarketingPlaceClient $marketingPlaceClient
@@ -20,9 +20,9 @@ class OffersService
 
     /**
      * Get offers from a page from the marketplace.
-     * 
+     *
      * @param int $page
-     * 
+     *
      * @return array
      */
     public function getPage(int $page): array
@@ -32,9 +32,9 @@ class OffersService
 
     /**
      * Get an offer details from the marketplace.
-     * 
+     *
      * @param string $offerId
-     * 
+     *
      * @return array
      */
     public function getOffer(string $offerId): array

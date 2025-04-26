@@ -6,11 +6,10 @@ namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\StartImportOffersJob;
 use App\Events\StartImportOffersEvent;
-use App\Models\ImportTask;
 
 /**
  * It's responsible for dispatching the job to start the import process.
- *  
+ *
  */
 class StartImportOffersListener
 {
@@ -24,9 +23,9 @@ class StartImportOffersListener
 
     /**
      * Handle the event.
-     * 
+     *
      * @param StartImportOffersEvent $event
-     * 
+     *
      */
     public function handle(StartImportOffersEvent $event): void
     {

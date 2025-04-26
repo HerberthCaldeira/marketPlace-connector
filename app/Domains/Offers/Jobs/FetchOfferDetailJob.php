@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * It's responsible for fetching the details of an offer from the marketplace and dispatching the event to send it to the hub.
- * 
+ *
  * @see App\Listeners\SendOfferToHubListener
- * 
+ *
  */
 class FetchOfferDetailJob implements ShouldQueue
 {
@@ -25,9 +25,9 @@ class FetchOfferDetailJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * 
+     *
      * @param ImportTaskOffer $importTaskOffer
-     * 
+     *
      */
     public function __construct(public ImportTaskOffer $importTaskOffer)
     {
@@ -35,19 +35,19 @@ class FetchOfferDetailJob implements ShouldQueue
 
     /**
      * Execute the job.
-     * 
+     *
      * @param OffersService $offersService
-     * 
+     *
      */
     public function handle(OffersService $offersService): void
     {
         logger("FetchOfferDetailJob::handle::{$this->importTaskOffer->reference}");
-        
+
         try {
             $data = $offersService->getOffer($this->importTaskOffer->reference);
             $this->importTaskOffer->update([
                 'payload' => $data['data'],
-                'status' => 'fetched'
+                'status'  => 'fetched',
             ]);
             $this->importTaskOffer->setState(new FetchedState($this->importTaskOffer));
             $this->importTaskOffer->sendToHub();

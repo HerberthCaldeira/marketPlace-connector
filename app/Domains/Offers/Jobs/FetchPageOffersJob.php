@@ -4,10 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Domains\Offers\Jobs;
 
-use App\Domains\Hub\Jobs\SendOfferToHubJob;
 use App\Domains\Offers\Services\OffersService;
 use App\Events\FetchOffersDetailsEvent;
-use App\Models\ImportTask;
 use App\Models\ImportTaskOffer;
 use App\Models\ImportTaskPage;
 use Illuminate\Bus\Batchable;
@@ -17,8 +15,8 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * It's responsible for discover how many offers should be imported from a page and dispatch the event to fetch them.
- * 
- *  
+ *
+ *
  * @see App\Listeners\FetchOffersDetailsListener
  */
 class FetchPageOffersJob implements ShouldQueue
@@ -28,9 +26,9 @@ class FetchPageOffersJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * 
+     *
      * @param ImportTaskPage $importTaskPage
-     * 
+     *
      */
     public function __construct(
         public ImportTaskPage $importTaskPage
@@ -40,9 +38,9 @@ class FetchPageOffersJob implements ShouldQueue
 
     /**
      * Execute the job.
-     * 
+     *
      * @param OffersService $offersService
-     * 
+     *
      * @see App\Listeners\FetchOffersDetailsListener
      */
     public function handle(OffersService $offersService): void
@@ -59,12 +57,12 @@ class FetchPageOffersJob implements ShouldQueue
                 'import_task_page_id' => $this->importTaskPage->id,
                 'reference'           => $offer,
                 'status'              => 'pending',
-            ]);          
+            ]);
         }
         /**
          * @see App\Listeners\FetchOffersDetailsListener
          */
-        event(new FetchOffersDetailsEvent($this->importTaskPage));     
+        event(new FetchOffersDetailsEvent($this->importTaskPage));
     }
 
     public function failed($exception): void
@@ -80,6 +78,6 @@ class FetchPageOffersJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['ImportTask::' .  $this->importTaskPage->import_task_id, 'FetchPageOffersJob::' . $this->importTaskPage->page_number];
+        return ['ImportTask::' . $this->importTaskPage->import_task_id, 'FetchPageOffersJob::' . $this->importTaskPage->page_number];
     }
 }

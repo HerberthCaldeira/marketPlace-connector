@@ -1,21 +1,22 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Offers\States;
 
 use App\Events\SendOfferToHubEvent;
 
+/**
+ * Implements the state pattern for fetched offers.
+ */
 class FetchedState extends OfferState
 {
-
     public function sendToHub(): void
     {
         /**
          * @see App\Listeners\SendOfferToHubListener
          */
         event(new SendOfferToHubEvent($this->importTaskOffer));
-     
     }
 
     public function fail(string $error): void

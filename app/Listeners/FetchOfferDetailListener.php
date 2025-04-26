@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\FetchOfferDetailJob;
 use App\Events\FetchOfferDetailEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 /**
- * It's responsible for dispatching the job to fetch the details of an offer.  
+ * It's responsible for dispatching the job to fetch the details of an offer.
  */
 class FetchOfferDetailListener
 {
@@ -22,9 +22,9 @@ class FetchOfferDetailListener
 
     /**
      * Handle the event.
-     * 
+     *
      * @param FetchOfferDetailEvent $event
-     * 
+     *
      */
     public function handle(FetchOfferDetailEvent $event): void
     {

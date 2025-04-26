@@ -1,11 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Offers\States;
 
+/**
+ * Implements the state pattern for sent to hub offers.
+ */
 class SentToHubState extends OfferState
-{  
+{
     public function sendToHub(): void
     {
         // Already sent to hub

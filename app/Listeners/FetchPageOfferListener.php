@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\FetchPageOffersJob;
 use App\Events\FetchPageOfferEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 /**
  * It dispatches a job to fetch offers from a single page.
@@ -22,9 +22,9 @@ class FetchPageOfferListener
 
     /**
      * Handle the event.
-     * 
+     *
      * @param FetchPageOfferEvent $event
-     * 
+     *
      */
     public function handle(FetchPageOfferEvent $event): void
     {

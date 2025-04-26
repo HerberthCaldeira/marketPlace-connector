@@ -18,9 +18,9 @@ class HubService
 
     /**
      * It's responsible for sending an offer to the hub.
-     * 
+     *
      * @param array $data
-     * 
+     *
      */
     public function sendOffer(array $data): array
     {

@@ -6,7 +6,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+/**
+ * Implements the import task model.
+ * @property int $id
+ * @property string $status
+ * @property \DateTime $started_at
+ * @property \DateTime $finished_at
+ * @property \DateTime $failed_at
+ * @property \DateTime $created_at
+ * @property \DateTime $updated_at
+ */
 class ImportTask extends Model
 {
     protected $fillable = [

@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * It's responsible for sending an offer to the hub.
- * 
- *  
+ *
+ *
  */
 class SendOfferToHubJob implements ShouldQueue
 {
@@ -24,9 +24,9 @@ class SendOfferToHubJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     * 
+     *
      * @param ImportTaskOffer $importTaskOffer
-     * 
+     *
      */
     public function __construct(public ImportTaskOffer $importTaskOffer)
     {
@@ -34,9 +34,9 @@ class SendOfferToHubJob implements ShouldQueue
 
     /**
      * Execute the job.
-     * 
+     *
      * @param HubService $hubService
-     * 
+     *
      */
     public function handle(HubService $hubService): void
     {
@@ -48,9 +48,9 @@ class SendOfferToHubJob implements ShouldQueue
 
     /**
      * Handle a job failure.
-     * 
+     *
      * @param \Throwable $exception
-     * 
+     *
      */
     public function failed($exception): void
     {

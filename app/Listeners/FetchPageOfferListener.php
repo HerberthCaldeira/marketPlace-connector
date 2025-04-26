@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
 /**
- * It dispatches a job to fetch offers from a page.
+ * It dispatches a job to fetch offers from a single page.
  */
 class FetchPageOfferListener
 {

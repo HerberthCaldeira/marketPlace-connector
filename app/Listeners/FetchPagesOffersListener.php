@@ -3,20 +3,17 @@
 namespace App\Listeners;
 
 use App\Domains\Offers\Jobs\FetchPageOffersJob;
-use App\Events\FetchPageOffersEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\FetchPagesOffersEvent;
 use Illuminate\Support\Facades\Bus;
 
 /**
-It is responsible for dispatching the job to fetch the offers from a page.
- * It will use a batch strategy to fetch the offers from all pages.
+ * It dispatches jobs to fetch offers from all pages of the import task using a batch strategy.
  * 
  * @param ImportTask $importTask
  * 
  * @see FetchPageOffersJob
  */
-class FetchPageOffersListener
+class FetchPagesOffersListener
 {
     /**
      * Create the event listener.
@@ -29,16 +26,16 @@ class FetchPageOffersListener
     /**
      * Handle the event.
      */
-    public function handle(FetchPageOffersEvent $event): void
+    public function handle(FetchPagesOffersEvent $event): void
     {
         logger('FetchPageOffersListener::Fetch pages offers using batch strategy', ['importTaskId' => $event->importTask->id]);
 
         $batchJobs = [];
         $importTask = $event->importTask;
-        $pages = $importTask->pages()->get();
+        $importTaskPages = $importTask->pages()->get();
 
-        foreach ($pages as $page) {
-            $batchJobs[] = new FetchPageOffersJob($importTask, $page);
+        foreach ($importTaskPages as $importTaskPage) {
+            $batchJobs[] = new FetchPageOffersJob($importTaskPage);
         }
 
         Bus::batch($batchJobs)

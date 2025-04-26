@@ -12,9 +12,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 /**
- * It's responsible for dispatching the event to fetch the offers from a page.
+ * It's responsible for dispatching the event to fetch the offers from a single page.
  * 
  * @param ImportTaskPage $importTaskPage
+ * 
+ * @see App\Listeners\FetchPageOfferListener
  * 
  */
 class FetchPageOfferEvent

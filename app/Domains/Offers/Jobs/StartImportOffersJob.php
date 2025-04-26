@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Offers\Services\ImportOffersService;
-use App\Events\FetchPageOffersEvent;
+use App\Events\FetchPagesOffersEvent;
 use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
  * 
  * @param ImportTask $importTask
  * @param int $page
- * @see App\Listeners\FetchPageOffersListener
+ * @see App\Listeners\FetchPagesOffersListener
  * 
  */
 class StartImportOffersJob implements ShouldQueue
@@ -33,7 +33,7 @@ class StartImportOffersJob implements ShouldQueue
      * Execute the job.
      * 
      * @param ImportOffersService $importOffersService
-     * @see App\Listeners\FetchPageOffersListener
+     * @see App\Listeners\FetchPagesOffersListener
      */
     public function handle(ImportOffersService $importOffersService): void
     {
@@ -52,9 +52,9 @@ class StartImportOffersJob implements ShouldQueue
         }
 
         /**
-         * @see App\Listeners\FetchPageOffersListener
+         * @see App\Listeners\FetchPagesOffersListener
          */
-        event(new FetchPageOffersEvent($this->importTask));
+        event(new FetchPagesOffersEvent($this->importTask));
     }
 
     public function failed($exception): void

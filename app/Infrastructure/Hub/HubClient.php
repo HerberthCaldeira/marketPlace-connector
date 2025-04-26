@@ -27,7 +27,7 @@ class HubClient implements IHubClient
     {
         try {
             $response = $this->api->post('/hub/create-offer', $data);
-            logger('Send Offer To Hub data before parse::', ['response' => $response->body()]);
+            //logger('Send Offer To Hub data before parse::', ['response' => $response->body()]);
             $response->throw();
 
             return $response->json();

@@ -4,8 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Events\FetchPageOfferEvent;
 use App\Events\StartImportOffersEvent;
 use App\Models\ImportTask;
+use App\Models\ImportTaskPage;
 use Illuminate\Http\Request;
 
 /**
@@ -19,13 +21,12 @@ class ImportOfferController extends Controller
 {
     public function __invoke(Request $request)
     {
-        //create as status padding
-        $importTask = ImportTask::create();
-        logger('ImportOfferController::Starting import offers', ['importTaskId' => $importTask->id]);
+        //create as status pending
+        $importTask = ImportTask::create();     
 
         /**
          * Dispatch the event to start the import process
-         * @see StartImportOffersListener
+         * @see App\Listeners\StartImportOffersListener
          */
         event(new StartImportOffersEvent($importTask));
 

@@ -11,8 +11,11 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-
-class FetchPageOffersEvent
+/**
+ * It's responsible for dispatching the event to fetch the offers from all pages of the import task. 
+ * @see App\Listeners\FetchPagesOffersListener
+ */
+class FetchPagesOffersEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

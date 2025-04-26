@@ -13,7 +13,6 @@ use App\Models\ImportTask;
  * 
  * @param ImportTask $importTask
  * 
- * @see StartImportOffersJob
  */
 class StartImportOffersListener
 {

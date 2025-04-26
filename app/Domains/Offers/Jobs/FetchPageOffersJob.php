@@ -18,10 +18,9 @@ use Illuminate\Support\Facades\Log;
 /**
  * It's responsible for discover how many offers should be imported from a page and dispatch the event to fetch them.
  * 
- * @param ImportTask $importTask
  * @param ImportTaskPage $importTaskPage
  * 
- * @see FetchOffersDetailsListener
+ * @see App\Listeners\FetchOffersDetailsListener
  */
 class FetchPageOffersJob implements ShouldQueue
 {
@@ -29,7 +28,6 @@ class FetchPageOffersJob implements ShouldQueue
     use Batchable;
 
     public function __construct(
-        public ImportTask $importTask,
         public ImportTaskPage $importTaskPage
     ) {
         //
@@ -39,7 +37,7 @@ class FetchPageOffersJob implements ShouldQueue
      * Execute the job.
      * 
      * @param ImportOffersService $importOffersService
-     * @see FetchOffersDetailsListener
+     * @see App\Listeners\FetchOffersDetailsListener
      */
     public function handle(ImportOffersService $importOffersService): void
     {
@@ -51,14 +49,14 @@ class FetchPageOffersJob implements ShouldQueue
 
         foreach ($offers as $offer) {
             ImportTaskOffer::create([
-                'import_task_id'      => $this->importTask->id,
+                'import_task_id'      => $this->importTaskPage->import_task_id,
                 'import_task_page_id' => $this->importTaskPage->id,
                 'reference'           => $offer,
                 'status'              => 'pending',
             ]);          
         }
         /**
-         * @see FetchOffersDetailsListener
+         * @see App\Listeners\FetchOffersDetailsListener
          */
         event(new FetchOffersDetailsEvent($this->importTaskPage));     
     }
@@ -76,6 +74,6 @@ class FetchPageOffersJob implements ShouldQueue
 
     public function tags(): array
     {
-        return ['ImportTask::' . $this->importTask->id, 'FetchPageOffersJob::' . $this->importTaskPage->page_number];
+        return ['ImportTask::' .  $this->importTaskPage->import_task_id, 'FetchPageOffersJob::' . $this->importTaskPage->page_number];
     }
 }

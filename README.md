@@ -26,4 +26,18 @@ HUB_URL=
 sail up
 ```
 
+Run queue worker:
+
+```bash
+sail artisan horizon
+```
+
+Migrate database:
+
+```bash
+sail artisan migrate
+```
+
+
+
 

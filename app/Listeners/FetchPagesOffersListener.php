@@ -34,6 +34,7 @@ class FetchPagesOffersListener
         $importTask = $event->importTask;
         $importTaskPages = $importTask->pages()->get();
 
+        /** @var \App\Models\ImportTaskPage $importTaskPage */
         foreach ($importTaskPages as $importTaskPage) {
             $batchJobs[] = new FetchPageOffersJob($importTaskPage);
         }

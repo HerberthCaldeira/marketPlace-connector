@@ -28,7 +28,7 @@ class FetchPageOfferEvent
      * 
      */
     public function __construct(
-        public ImportTaskPage $importTaskPage        
+        public ImportTaskPage $importTaskPage
     ) {
         //
     }

@@ -27,7 +27,7 @@ class FetchPagesOffersEvent
      * 
      */
     public function __construct(
-        public ImportTask $importTask        
+        public ImportTask $importTask
     ) {
         //
     }

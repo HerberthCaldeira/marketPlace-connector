@@ -39,6 +39,7 @@ class FetchOffersDetailsListener
 
         $batchJobs = [];
 
+        /** @var \App\Models\ImportTaskOffer $offer */
         foreach ($offers as $offer) {
             $batchJobs[] = new FetchOfferDetailJob($offer);
         }

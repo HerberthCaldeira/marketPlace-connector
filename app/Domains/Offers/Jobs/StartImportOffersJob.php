@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domains\Offers\Jobs;
 
-use App\Domains\Offers\Services\ImportOffersService;
+use App\Domains\Offers\Services\OffersService;
 use App\Events\FetchPagesOffersEvent;
 use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Log;
 /**
  * It's responsible for discover how many pages of offers should be imported and dispatch the event to fetch them.
  * 
- * @param ImportTask $importTask
- * @param int $page
  * @see App\Listeners\FetchPagesOffersListener
  * 
  */
@@ -25,6 +23,13 @@ class StartImportOffersJob implements ShouldQueue
     use Queueable;
     use Batchable;
 
+    /**
+     * Create a new job instance.
+     * 
+     * @param ImportTask $importTask
+     * @param int $page
+     * 
+     */
     public function __construct(public ImportTask $importTask, public ?int $page = 1)
     {
     }
@@ -32,12 +37,12 @@ class StartImportOffersJob implements ShouldQueue
     /**
      * Execute the job.
      * 
-     * @param ImportOffersService $importOffersService
+     * @param OffersService $offersService
      * @see App\Listeners\FetchPagesOffersListener
      */
-    public function handle(ImportOffersService $importOffersService): void
+    public function handle(OffersService $offersService): void
     {
-        $pageOffers = $importOffersService->getPage($this->page);
+        $pageOffers = $offersService->getPage($this->page);
         $pagination = $pageOffers['pagination'];
         $totalPages = $pagination['total_pages'];
 

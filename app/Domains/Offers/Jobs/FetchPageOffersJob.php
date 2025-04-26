@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Offers\Jobs;
 
 use App\Domains\Hub\Jobs\SendOfferToHubJob;
-use App\Domains\Offers\Services\ImportOffersService;
+use App\Domains\Offers\Services\OffersService;
 use App\Events\FetchOffersDetailsEvent;
 use App\Models\ImportTask;
 use App\Models\ImportTaskOffer;
@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * It's responsible for discover how many offers should be imported from a page and dispatch the event to fetch them.
  * 
- * @param ImportTaskPage $importTaskPage
- * 
+ *  
  * @see App\Listeners\FetchOffersDetailsListener
  */
 class FetchPageOffersJob implements ShouldQueue
@@ -27,6 +26,12 @@ class FetchPageOffersJob implements ShouldQueue
     use Queueable;
     use Batchable;
 
+    /**
+     * Create a new job instance.
+     * 
+     * @param ImportTaskPage $importTaskPage
+     * 
+     */
     public function __construct(
         public ImportTaskPage $importTaskPage
     ) {
@@ -36,14 +41,15 @@ class FetchPageOffersJob implements ShouldQueue
     /**
      * Execute the job.
      * 
-     * @param ImportOffersService $importOffersService
+     * @param OffersService $offersService
+     * 
      * @see App\Listeners\FetchOffersDetailsListener
      */
-    public function handle(ImportOffersService $importOffersService): void
+    public function handle(OffersService $offersService): void
     {
         logger('FetchPageOffersJob::Discover offers from a page', ['page_number' => $this->importTaskPage->page_number]);
 
-        $pageOffers = $importOffersService->getPage($this->importTaskPage->page_number);
+        $pageOffers = $offersService->getPage($this->importTaskPage->page_number);
 
         $offers = collect($pageOffers['data']['offers']);
 

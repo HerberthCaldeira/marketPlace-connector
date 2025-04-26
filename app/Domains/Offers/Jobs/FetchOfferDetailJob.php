@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domains\Offers\Jobs;
 
-use App\Domains\Offers\Services\ImportOffersService;
+use App\Domains\Offers\Services\OffersService;
 use App\Events\SendOfferToHubEvent;
 use App\Models\ImportTaskOffer;
 use Illuminate\Bus\Batchable;
@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 /**
  * It's responsible for fetching the details of an offer from the marketplace and dispatching the event to send it to the hub.
  * 
- * @param ImportTaskOffer $importTaskOffer
  * @see App\Listeners\SendOfferToHubListener
  * 
  */
@@ -26,6 +25,9 @@ class FetchOfferDetailJob implements ShouldQueue
 
     /**
      * Create a new job instance.
+     * 
+     * @param ImportTaskOffer $importTaskOffer
+     * 
      */
     public function __construct(public ImportTaskOffer $importTaskOffer)
     {
@@ -33,11 +35,14 @@ class FetchOfferDetailJob implements ShouldQueue
 
     /**
      * Execute the job.
+     * 
+     * @param OffersService $offersService
+     * 
      */
-    public function handle(ImportOffersService $importOffersService): void
+    public function handle(OffersService $offersService): void
     {
         logger("FetchOfferDetailJob::handle::{$this->importTaskOffer->reference}");
-        $data = $importOffersService->getOffer($this->importTaskOffer->reference);
+        $data = $offersService->getOffer($this->importTaskOffer->reference);
         $this->importTaskOffer->update(['payload' => $data['data'], 'status' => 'fetched']);
 
         /**

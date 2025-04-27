@@ -1,79 +1,42 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Domains\Offers\Jobs;
 
-use App\Domains\Offers\Services\OffersService;
-use App\Events\FetchPagesEvent;
+use App\Domains\Offers\UseCases\StartImportOffers;
 use App\Models\ImportTask;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
-/**
- * It's responsible for discover how many pages of offers should be imported and dispatch the event to fetch them.
- *
- * @see App\Listeners\FetchPagesListener
- *
- */
 class StartImportOffersJob implements ShouldQueue
 {
     use Queueable;
     use Batchable;
 
-    /**
-     * Create a new job instance.
-     *
-     * @param ImportTask $importTask
-     * @param int $page
-     *
-     */
     public function __construct(
-        public ImportTask $importTask,
-        public ?int $page = 1
+        private readonly ImportTask $importTask,
+        private readonly ?int $page = 1
     ) {
     }
 
-    /**
-     * Execute the job.
-     *
-     * @param OffersService $offersService
-     * @see App\Listeners\FetchPagesListener
-     */
-    public function handle(OffersService $offersService): void
+    public function handle(StartImportOffers $useCase): void
     {
-        $pageOffers = $offersService->getPage($this->page);
-        $pagination = $pageOffers['pagination'];
-        $totalPages = $pagination['total_pages'];
-
-        logger('StartImportOffersJob::Discover total pages', ['page' => $this->page, 'totalPages' => $totalPages]);
-
-        for ($this->page; $this->page <= $totalPages; $this->page++) {
-            $this->importTask->pages()->create([
-                'import_task_id' => $this->importTask->id,
-                'page_number'    => $this->page,
-                'status'         => 'pending',
-            ]);
+        try {
+            $useCase->execute($this->importTask, $this->page);
+        } catch (\Throwable $exception) {
+            $this->importTask->update(['status' => 'failed', 'finished_at' => now()]);
+            Log::error(
+                'StartImportOffersJob::Error importing offers from marketplace.',
+                [
+                    'importTaskId' => $this->importTask->id,
+                    'error' => $exception->getMessage(),
+                ]
+            );
+            throw $exception;
         }
-
-        /**
-         * @see App\Listeners\FetchPagesListener
-         */
-        event(new FetchPagesEvent($this->importTask));
-    }
-
-    public function failed($exception): void
-    {
-        $this->importTask->update(['status' => 'failed', 'finished_at' => now()]);
-        Log::error(
-            'StartImportOffersJob::Error importing offers from marketplace.',
-            [
-                'importTaskId' => $this->importTask->id,
-                'error'        => $exception->getMessage(),
-            ]
-        );
     }
 
     public function tags(): array

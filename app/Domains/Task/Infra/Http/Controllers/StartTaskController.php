@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
+use App\Domains\Task\UseCases\StartTaskUseCase;
 use App\Events\StartImportOffersEvent;
 use App\Models\ImportTask;
 use Illuminate\Http\Request;
@@ -15,18 +16,13 @@ use Illuminate\Http\Request;
  *
  * @see StartImportOffersListener
  */
-class ImportOfferController extends Controller
+class StartTaskController 
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, StartTaskUseCase $startTaskUseCase)
     {
-        //create as status pending
-        $importTask = ImportTask::create();
-
-        /**
-         * Dispatch the event to start the import process
-         * @see App\Listeners\StartImportOffersListener
-         */
-        event(new StartImportOffersEvent($importTask));
+        $startTaskUseCase->execute([
+            $request->validated()
+        ]);
 
         return response()->json([
             'message' => 'Import offers job dispatched',

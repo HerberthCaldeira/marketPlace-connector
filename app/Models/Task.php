@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \DateTime $created_at
  * @property \DateTime $updated_at
  */
-class ImportTask extends Model
+class Task extends Model
 {
     protected $fillable = [
         'status',

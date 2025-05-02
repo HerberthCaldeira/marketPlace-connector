@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domains\Offers\UseCases;
 
+use App\Domains\Offers\Contracts\IUseCase;
 use App\Domains\Offers\Services\OffersService;
 use App\Events\FetchPagesEvent;
 use App\Models\ImportTask;
 
-class StartImportOffers
+class StartImportOffers implements IUseCase
 {
     public function __construct(
         private readonly OffersService $offersService

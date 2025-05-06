@@ -11,7 +11,7 @@ final class OnFetchedOfferDetail
 
     public function handle(FetchedOfferDetailEvent $event): void
     {
-        logger('onFetched::offer', ['id' => $event->offerId]);
+        logger('OnFetchedOfferDetail::offer', ['id' => $event->offerId]);
         SendOfferToHubJob::dispatch($event->offerId);
     }
 }

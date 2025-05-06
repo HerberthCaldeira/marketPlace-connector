@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Domains\Hub\Contracts;
+namespace App\Domains\Task\Entities\Gateways;
 
 interface IHubClient
 {

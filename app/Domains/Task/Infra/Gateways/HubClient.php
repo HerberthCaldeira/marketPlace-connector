@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\Infrastructure\Hub;
+namespace App\Domains\Task\Infra\Gateways;
 
-use App\Domains\Hub\Contracts\IHubClient;
+use App\Domains\Task\Entities\Gateways\IHubClient;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

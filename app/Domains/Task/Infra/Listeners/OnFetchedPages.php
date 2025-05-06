@@ -5,7 +5,6 @@ namespace App\Domains\Task\Infra\Listeners;
 use App\Domains\Task\Entities\Events\FetchedPagesEvent;
 use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
 use App\Domains\Task\Infra\Jobs\FetchOffersReferencesOfaPageJob;
-use App\Domains\Task\Infra\Jobs\FetchPagesJob;
 use Illuminate\Support\Facades\Bus;
 
 final class OnFetchedPages
@@ -25,6 +24,7 @@ final class OnFetchedPages
             $jobs[] = new FetchOffersReferencesOfaPageJob($pageEntity->id);
         }
 
-        Bus::chain($jobs)->dispatch();
+        Bus::chain($jobs)
+            ->dispatch();
     }
 }

@@ -10,6 +10,7 @@ class OfferEntity {
         public int $taskPageId,
         public string $reference,
         public string $status,
+        public ?array $payload,
         public ?\DateTimeInterface $sentAt,
         public ?string $errorMessage,
     ) {}

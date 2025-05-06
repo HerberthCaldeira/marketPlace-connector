@@ -45,8 +45,6 @@ final class MarketingPlaceClient implements IMarketingPlaceClient
                 'page' => $page,
             ])->get('/offers');
 
-            logger('MarketPlaceClient::Get offers (page) from marketplace - before parse::', ['response' => $response->body()]);
-
             return $response->json();
         } catch (\Exception $e) {
             Log::error(
@@ -70,7 +68,6 @@ final class MarketingPlaceClient implements IMarketingPlaceClient
     {
         try {
             $response = $this->api->get("/offers/{$offerId}");
-            logger('MarketPlaceClient::Get offer from marketplace - before parse::', ['response' => $response->body()]);
 
             return $response->json();
         } catch (\Exception $e) {

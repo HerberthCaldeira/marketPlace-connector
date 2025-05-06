@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Listeners;
 
@@ -7,11 +9,12 @@ use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
 use App\Domains\Task\Infra\Jobs\FetchOffersReferencesOfaPageJob;
 use Illuminate\Support\Facades\Bus;
 
-final class OnFetchedPages
+final readonly class OnFetchedPages
 {
     public function __construct(
         private ITaskPageRepository $taskPageRepository
-    ){}
+    ) {
+    }
 
     public function handle(FetchedPagesEvent $event): void
     {
@@ -20,6 +23,7 @@ final class OnFetchedPages
         $pagesEntities = $this->taskPageRepository->getByTaskId($event->taskId, 'pending');
 
         $jobs = [];
+
         foreach ($pagesEntities as $pageEntity) {
             $jobs[] = new FetchOffersReferencesOfaPageJob($pageEntity->id);
         }

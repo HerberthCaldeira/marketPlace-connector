@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Repositories\Eloquent;
 
@@ -12,17 +14,15 @@ class TaskRepository implements ITaskRepository
     public function create(array $data): TaskEntity
     {
         $taskModel = Task::create($data);
-        
+
         $taskEntity = new TaskEntity(
-            $taskModel->id,   
+            $taskModel->id,
             $taskModel->startedAt,
             $taskModel->finishedAt
         );
 
-        $taskEntity->setState(TaskStateFactory::create($taskModel->status, $taskEntity));
+        $taskEntity->setState(TaskStateFactory::create($taskEntity, $taskModel->status));
 
         return $taskEntity;
     }
-
-
 }

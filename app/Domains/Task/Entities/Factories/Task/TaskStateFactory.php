@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Entities\Factories\Task;
 
@@ -11,13 +13,13 @@ use App\Domains\Task\Entities\TaskEntity;
 
 class TaskStateFactory
 {
-    public static function create(?string $state =null, TaskEntity $task): ITaskState
+    public static function create(TaskEntity $task, ?string $state = null): ITaskState
     {
-        return match($state) {
-            TaskStateEnum::STARTED->value => new TaskStartedState($task),
+        return match ($state) {
+            TaskStateEnum::STARTED->value   => new TaskStartedState($task),
             TaskStateEnum::COMPLETED->value => new TaskCompletedState($task),
-            TaskStateEnum::FAILED->value => new TaskFailedState($task),
-            default =>  new TaskStartedState($task),
+            TaskStateEnum::FAILED->value    => new TaskFailedState($task),
+            default                         => new TaskStartedState($task),
         };
     }
 }

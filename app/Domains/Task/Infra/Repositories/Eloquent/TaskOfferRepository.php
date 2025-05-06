@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Domains\Task\Infra\Repositories\Eloquent;
 
 use App\Domains\Task\Entities\OfferEntity;
@@ -10,11 +12,10 @@ class TaskOfferRepository implements ITaskOfferRepository
 {
     public function create(array $data): OfferEntity
     {
+        $offerModel = Offer::create($data);
 
-        $offerModel = Offer::create($data);        
-        
         $offerEntity = new OfferEntity(
-            $offerModel->id,   
+            $offerModel->id,
             $offerModel->task_id,
             $offerModel->task_page_id,
             $offerModel->reference,
@@ -24,20 +25,19 @@ class TaskOfferRepository implements ITaskOfferRepository
             $offerModel->error_message
         );
 
-        return $offerEntity; 
-
+        return $offerEntity;
     }
 
     public function getById(int $id): OfferEntity | null
     {
         $model = Offer::query()->where('id', $id)->first();
 
-        if(! $model instanceof Offer){
-            return null;            
+        if (! $model instanceof Offer) {
+            return null;
         }
-        
+
         return new OfferEntity(
-            $model->id,   
+            $model->id,
             $model->task_id,
             $model->task_page_id,
             $model->reference,
@@ -46,46 +46,41 @@ class TaskOfferRepository implements ITaskOfferRepository
             $model->sent_at,
             $model->error_message
         );
-
-
     }
 
-    public function getByPageId(int $id, string $status = 'pending'): array | null{
-
+    public function getByPageId(int $id, string $status = 'pending'): array | null
+    {
         $models = Offer::query()
-        ->where('task_page_id', $id)
-        ->where('status', $status)
-        ->get();
+            ->where('task_page_id', $id)
+            ->where('status', $status)
+            ->get();
 
-        if( $models->isEmpty()){
+        if ($models->isEmpty()) {
             return null;
         }
 
-        $entities = $models->map(function (Offer $model) {
-            return new OfferEntity(
-                $model->id,   
-                $model->task_id,
-                $model->task_page_id,
-                $model->reference,
-                $model->status,
-                $model->payload,
-                $model->sent_at,
-                $model->error_message
-            );
-        })->toArray();
+        $entities = $models->map(fn (Offer $model): OfferEntity => new OfferEntity(
+            $model->id,
+            $model->task_id,
+            $model->task_page_id,
+            $model->reference,
+            $model->status,
+            $model->payload,
+            $model->sent_at,
+            $model->error_message
+        ))->toArray();
 
         return $entities;
-
     }
 
-    public function update(int $id, array $data): OfferEntity {
-
+    public function update(int $id, array $data): OfferEntity
+    {
         Offer::query()->where('id', $id)->update($data);
 
         $model = Offer::query()->where('id', $id)->first();
-  
+
         $entity = new OfferEntity(
-            $model->id,   
+            $model->id,
             $model->task_id,
             $model->task_page_id,
             $model->reference,
@@ -97,5 +92,4 @@ class TaskOfferRepository implements ITaskOfferRepository
 
         return $entity;
     }
-
 }

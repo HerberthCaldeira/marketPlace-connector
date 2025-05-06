@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Task\UseCases;
 
@@ -10,8 +10,8 @@ use App\Domains\Task\Entities\Repositories\ITaskOfferRepository;
 class SendOfferToHubUseCase
 {
     public function __construct(
-        private IHubClient $hubClient,
-        private ITaskOfferRepository $taskOfferRepository
+        private readonly IHubClient $hubClient,
+        private readonly ITaskOfferRepository $taskOfferRepository
     ) {
     }
 
@@ -25,6 +25,7 @@ class SendOfferToHubUseCase
             $this->taskOfferRepository->update($offerId, ['status' => 'completed']);
         } catch (\Throwable $exception) {
             $this->taskOfferRepository->update($offerId, ['status' => 'failed']);
+
             throw $exception;
         }
     }

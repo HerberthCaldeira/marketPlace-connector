@@ -1,9 +1,11 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Entities;
 
-class OfferEntity {
-
+class OfferEntity
+{
     public function __construct(
         public int $id,
         public int $taskId,
@@ -13,5 +15,6 @@ class OfferEntity {
         public ?array $payload,
         public ?\DateTimeInterface $sentAt,
         public ?string $errorMessage,
-    ) {}
+    ) {
+    }
 }

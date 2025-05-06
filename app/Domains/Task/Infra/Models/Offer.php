@@ -19,12 +19,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \DateTime $finished_at
  * @property \DateTime $failed_at
  * @property \DateTime $created_at
- * @property \DateTime $updated_at 
- * 
+ * @property \DateTime $updated_at
+ *
  */
 class Offer extends Model
 {
     protected $table = 'task_page_offers';
+
     protected $fillable = [
         'task_id',
         'task_page_id',

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Jobs;
 
@@ -22,8 +22,7 @@ class FetchOfferDetailJob implements ShouldQueue
 
     public function handle(FetchOfferDetailUseCase $useCase): void
     {
-
-        try {            
+        try {
             $useCase->execute($this->offerId);
         } catch (\Throwable $exception) {
             Log::error(
@@ -32,9 +31,8 @@ class FetchOfferDetailJob implements ShouldQueue
                     'error' => $exception->getMessage(),
                 ]
             );
+
             throw $exception;
         }
     }
-
-   
 }

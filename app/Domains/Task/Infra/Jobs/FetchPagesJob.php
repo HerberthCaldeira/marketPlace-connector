@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Jobs;
 
@@ -36,6 +36,4 @@ class FetchPagesJob implements ShouldQueue
             throw $exception;
         }
     }
-
- 
 }

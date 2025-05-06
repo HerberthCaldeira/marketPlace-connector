@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Repositories\Eloquent;
 
@@ -12,7 +13,7 @@ class TaskPageRepository implements ITaskPageRepository
     public function create(array $data): PageEntity
     {
         $pageModel = Page::create($data);
-        
+
         $pageEntity = new PageEntity(
             $pageModel->id,
             $pageModel->task_id,
@@ -23,16 +24,16 @@ class TaskPageRepository implements ITaskPageRepository
         );
 
         return $pageEntity;
-    }    
+    }
 
     public function getById(int $id): PageEntity | null
     {
         $pageModel = Page::query()->where('id', $id)->first();
 
-        if(! $pageModel instanceof Page){
-            return null;            
+        if (! $pageModel instanceof Page) {
+            return null;
         }
-        
+
         return new PageEntity(
             $pageModel->id,
             $pageModel->task_id,
@@ -41,7 +42,6 @@ class TaskPageRepository implements ITaskPageRepository
             $pageModel->started_at,
             $pageModel->finished_at
         );
-
     }
 
     public function getByTaskId(int $taskId, string $status = 'pending'): array | null
@@ -51,26 +51,24 @@ class TaskPageRepository implements ITaskPageRepository
             ->where('status', $status)
             ->get();
 
-        if( $pageModels->isEmpty()){
+        if ($pageModels->isEmpty()) {
             return null;
         }
 
-        $pageEntities = $pageModels->map(function (Page $pageModel) {
-            return new PageEntity(
-                $pageModel->id,
-                $pageModel->task_id,
-                $pageModel->page_number,
-                $pageModel->status,
-                $pageModel->started_at,
-                $pageModel->finished_at
-            );
-        })->toArray();
+        $pageEntities = $pageModels->map(fn (Page $pageModel): PageEntity => new PageEntity(
+            $pageModel->id,
+            $pageModel->task_id,
+            $pageModel->page_number,
+            $pageModel->status,
+            $pageModel->started_at,
+            $pageModel->finished_at
+        ))->toArray();
 
         return $pageEntities;
     }
 
-    public function update(int $id, array $data): PageEntity {
-
+    public function update(int $id, array $data): PageEntity
+    {
         Page::query()->where('id', $id)->update($data);
 
         $pageModel = Page::query()->where('id', $id)->first();
@@ -87,4 +85,3 @@ class TaskPageRepository implements ITaskPageRepository
         return $pageEntity;
     }
 }
-    

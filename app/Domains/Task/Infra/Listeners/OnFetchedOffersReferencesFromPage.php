@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Listeners;
 
@@ -10,14 +12,16 @@ use Illuminate\Support\Facades\Bus;
 class OnFetchedOffersReferencesFromPage
 {
     public function __construct(
-        private ITaskOfferRepository $taskOfferRepository
-    ){}
+        private readonly ITaskOfferRepository $taskOfferRepository
+    ) {
+    }
 
     public function handle(FetchedOffersReferencesFromPageEvent $event): void
     {
         $offersEntities = $this->taskOfferRepository->getByPageId($event->pageId, 'pending');
 
         $jobs = [];
+
         foreach ($offersEntities as $offerEntity) {
             $jobs[] = new FetchOfferDetailJob($offerEntity->id);
         }

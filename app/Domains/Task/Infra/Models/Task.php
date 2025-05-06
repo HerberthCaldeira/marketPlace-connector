@@ -7,6 +7,7 @@ namespace App\Domains\Task\Infra\Models;
 use App\Domains\Marktplace\Infra\Models\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * Implements the import task model.
  * @property int $id

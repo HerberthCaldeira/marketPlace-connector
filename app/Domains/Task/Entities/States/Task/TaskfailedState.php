@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Domains\Task\Entities\States\Task;
 
-use App\Domains\Task\Entities\States\Task\TaskCompletedState;
-use App\Domains\Task\Entities\States\Task\TaskStartedState;
 use App\Domains\Task\Entities\TaskEntity;
 
 class TaskFailedState implements ITaskState
 {
-
-    public function __construct(private TaskEntity $task){}
+    public function __construct(private readonly TaskEntity $task)
+    {
+    }
 
     public function getStateName(): string
     {

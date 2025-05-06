@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Domains\Task\Entities\States\Task;
 
 use App\Domains\Task\Entities\TaskEntity;
 
 class TaskCompletedState implements ITaskState
 {
-    public function __construct(private TaskEntity $task)
+    public function __construct(private readonly TaskEntity $task)
     {
     }
 

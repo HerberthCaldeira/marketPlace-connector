@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Domains\Task\Infra\Listeners;
 
 use App\Domains\Task\Entities\Events\FetchedOfferDetailEvent;
@@ -7,7 +9,9 @@ use App\Domains\Task\Infra\Jobs\SendOfferToHubJob;
 
 final class OnFetchedOfferDetail
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function handle(FetchedOfferDetailEvent $event): void
     {

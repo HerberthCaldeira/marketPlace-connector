@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Entities;
 
@@ -7,9 +9,9 @@ use App\Domains\Task\Entities\States\Task\TaskCompletedState;
 use App\Domains\Task\Entities\States\Task\TaskFailedState;
 use App\Domains\Task\Entities\States\Task\TaskStartedState;
 
-class TaskEntity {
-
-    public function __construct( 
+class TaskEntity
+{
+    public function __construct(
         public int $id,
         public ?\DateTimeInterface $startedAt,
         public ?\DateTimeInterface $finishedAt,

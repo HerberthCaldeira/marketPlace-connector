@@ -14,12 +14,12 @@ use Illuminate\Http\Request;
  *
  * @see StartImportOffersListener
  */
-class StartTaskController 
+class StartTaskController
 {
     public function __invoke(Request $request, StartTaskUseCase $startTaskUseCase)
     {
         $startTaskUseCase->execute(
-          []
+            []
         );
 
         return response()->json([

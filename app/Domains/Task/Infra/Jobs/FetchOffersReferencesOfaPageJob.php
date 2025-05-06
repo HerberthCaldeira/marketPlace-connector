@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Jobs;
 
@@ -24,16 +24,15 @@ class FetchOffersReferencesOfaPageJob implements ShouldQueue
     {
         try {
             $useCase->execute($this->pageId);
-        } catch (\Throwable $exception) {    
+        } catch (\Throwable $exception) {
             Log::error(
-                 'FetchPageOffersJob::Error importing offers from marketplace.',
+                'FetchPageOffersJob::Error importing offers from marketplace.',
                 [
-                  'error' => $exception->getMessage(),
+                    'error' => $exception->getMessage(),
                 ]
             );
+
             throw $exception;
         }
     }
-
-
 }

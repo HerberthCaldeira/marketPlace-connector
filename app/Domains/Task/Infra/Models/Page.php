@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Models;
 
-use App\Domains\Task\Infra\Models\Task;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * Implements the import task page model.
  * @property int $id
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Page extends Model
 {
     protected $table = 'task_pages';
+
     protected $fillable = [
         'task_id',
         'page_number',

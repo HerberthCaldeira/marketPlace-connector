@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Domains\Task\Infra\Jobs;
 
@@ -26,11 +26,10 @@ class SendOfferToHubJob implements ShouldQueue
             $useCase->execute($this->offerId);
         } catch (\Throwable $exception) {
             Log::error('SendOfferToHubJob::Error sending offer to hub', [
-                'error' => $exception->getMessage()
+                'error' => $exception->getMessage(),
             ]);
+
             throw $exception;
         }
     }
-
-
 }

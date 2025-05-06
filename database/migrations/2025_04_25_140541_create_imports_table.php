@@ -15,7 +15,7 @@ return new class () extends Migration
     {
         Schema::create('tasks', function (Blueprint $table): void {
             $table->id();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('started');
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finished_at')->nullable();
             $table->timestamps();

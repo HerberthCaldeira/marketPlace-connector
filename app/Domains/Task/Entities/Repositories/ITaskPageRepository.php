@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Domains\Task\Entities\Repositories;
+
+use App\Domains\Task\Entities\PageEntity;
+
+interface ITaskPageRepository
+{
+    public function create(array $data): PageEntity;
+    public function getById(int $id): PageEntity | null;
+    public function getByTaskId(int $taskId, string $status): array | null;
+    public function update(int $id, array $data): PageEntity;
+}

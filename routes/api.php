@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-use App\Http\Controllers\StartTaskController;
+use App\Domains\Task\Infra\Http\Controllers\StartTaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

@@ -2,11 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Controllers;
+namespace App\Domains\Task\Infra\Http\Controllers;
 
 use App\Domains\Task\UseCases\StartTaskUseCase;
-use App\Events\StartImportOffersEvent;
-use App\Models\ImportTask;
 use Illuminate\Http\Request;
 
 /**
@@ -20,12 +18,12 @@ class StartTaskController
 {
     public function __invoke(Request $request, StartTaskUseCase $startTaskUseCase)
     {
-        $startTaskUseCase->execute([
-            $request->validated()
-        ]);
+        $startTaskUseCase->execute(
+          []
+        );
 
         return response()->json([
-            'message' => 'Import offers job dispatched',
+            'message' => 'Task job dispatched',
         ]);
     }
 }

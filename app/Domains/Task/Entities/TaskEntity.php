@@ -11,9 +11,9 @@ class TaskEntity {
 
     public function __construct( 
         public int $id,
-        private ITaskState $status, //must be private for state should be only access by getState()
         public ?\DateTimeInterface $startedAt,
         public ?\DateTimeInterface $finishedAt,
+        private ?ITaskState $status = null //must be private for state should be only access by getState()
     ) {
         $this->status = $status ?? new TaskStartedState($this);
     }

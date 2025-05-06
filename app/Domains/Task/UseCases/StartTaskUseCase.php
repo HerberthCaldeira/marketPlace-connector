@@ -2,17 +2,23 @@
 
 namespace App\Domains\Task\UseCases;
 
-use App\Domains\Task\Entities\Contracts\Repositories\ITaskRepository;
-use App\Domains\Task\UseCases\Contracts\IUseCases;
+use App\Domains\SharedKernel\Events\Dispatcher\IEventDispatcher;
+use App\Domains\Task\Entities\Events\TaskStarted;
+use App\Domains\Task\Entities\Repositories\ITaskRepository;
+use App\Domains\SharedKernel\Contracts\IUseCase;
 
-class StartTaskUseCase implements IUseCases
+class StartTaskUseCase implements IUseCase
 {
-    public function __construct(private ITaskRepository $taskRepository){}
+    public function __construct(
+        private ITaskRepository $taskRepository, 
+        private IEventDispatcher $eventDispatcher
+    ){}
 
     public function execute(array $data): array
     {
-        $taskEntity = $this->taskRepository->create($data);
-        
+        $taskEntity = $this->taskRepository->create($data);      
+
+        $this->eventDispatcher->dispatch(new TaskStarted($taskEntity));
 
         return [
             'id' => $taskEntity->id,

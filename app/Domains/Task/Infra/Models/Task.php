@@ -2,8 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\Models;
+namespace App\Domains\Task\Infra\Models;
 
+use App\Domains\Marktplace\Infra\Models\Page;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
@@ -33,6 +34,6 @@ class Task extends Model
 
     public function pages(): HasMany
     {
-        return $this->hasMany(ImportTaskPage::class);
+        return $this->hasMany(Page::class);
     }
 }

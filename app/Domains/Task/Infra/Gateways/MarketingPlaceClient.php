@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\Infrastructure\Marketplace;
+namespace App\Domains\Task\Infra\Gateways;
 
-use App\Domains\Offers\Contracts\IMarketingPlaceClient;
+use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

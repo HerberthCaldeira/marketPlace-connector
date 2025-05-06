@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Domains\Task\Entities\Contracts\Repositories;
+namespace App\Domains\Task\Entities\Repositories;
 
 use App\Domains\Task\Entities\TaskEntity;
 

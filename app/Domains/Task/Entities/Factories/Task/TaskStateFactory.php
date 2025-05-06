@@ -11,12 +11,13 @@ use App\Domains\Task\Entities\TaskEntity;
 
 class TaskStateFactory
 {
-    public static function create(string $state, TaskEntity $task): ITaskState
+    public static function create(?string $state =null, TaskEntity $task): ITaskState
     {
         return match($state) {
             TaskStateEnum::STARTED->value => new TaskStartedState($task),
             TaskStateEnum::COMPLETED->value => new TaskCompletedState($task),
             TaskStateEnum::FAILED->value => new TaskFailedState($task),
+            default =>  new TaskStartedState($task),
         };
     }
 }

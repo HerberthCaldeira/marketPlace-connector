@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Domains\Offers\Contracts;
+namespace App\Domains\Task\Entities\Gateways;
 
 interface IMarketingPlaceClient
 {

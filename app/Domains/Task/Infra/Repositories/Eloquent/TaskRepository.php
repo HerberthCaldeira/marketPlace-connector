@@ -1,21 +1,20 @@
 <?php 
 
-namespace App\Infrastructure\Task\Repositories\Eloquent;
+namespace App\Domains\Task\Infra\Repositories\Eloquent;
 
-use App\Domains\Task\Entities\Contracts\Repositories\ITaskRepository;
 use App\Domains\Task\Entities\Factories\Task\TaskStateFactory;
+use App\Domains\Task\Entities\Repositories\ITaskRepository;
 use App\Domains\Task\Entities\TaskEntity;
-use App\Models\Task;
+use App\Domains\Task\Infra\Models\Task;
 
-class TaskEloquentRepository implements ITaskRepository
+class TaskRepository implements ITaskRepository
 {
     public function create(array $data): TaskEntity
     {
         $taskModel = Task::create($data);
         
         $taskEntity = new TaskEntity(
-            $taskModel->id,
-            $taskModel->status,
+            $taskModel->id,   
             $taskModel->startedAt,
             $taskModel->finishedAt
         );
@@ -24,7 +23,6 @@ class TaskEloquentRepository implements ITaskRepository
 
         return $taskEntity;
     }
-
 
 
 }

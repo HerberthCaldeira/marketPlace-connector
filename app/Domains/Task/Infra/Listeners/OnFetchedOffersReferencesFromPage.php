@@ -26,7 +26,8 @@ class OnFetchedOffersReferencesFromPage
             $jobs[] = new FetchOfferDetailJob($offerEntity->id);
         }
 
-        Bus::chain($jobs)
+        Bus::batch($jobs)
+            ->allowFailures()
             ->dispatch();
     }
 }

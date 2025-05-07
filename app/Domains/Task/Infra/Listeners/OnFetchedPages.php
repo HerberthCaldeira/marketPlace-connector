@@ -18,7 +18,7 @@ final readonly class OnFetchedPages
 
     public function handle(FetchedPagesEvent $event): void
     {
-        logger('onFetched::page', ['id' => $event->taskId]);
+        logger('OnFetchedPages::page', ['id' => $event->taskId]);
 
         $pagesEntities = $this->taskPageRepository->getByTaskId($event->taskId, 'pending');
 
@@ -28,7 +28,8 @@ final readonly class OnFetchedPages
             $jobs[] = new FetchOffersReferencesOfaPageJob($pageEntity->id);
         }
 
-        Bus::chain($jobs)
+        Bus::batch($jobs)
+            ->allowFailures()
             ->dispatch();
     }
 }

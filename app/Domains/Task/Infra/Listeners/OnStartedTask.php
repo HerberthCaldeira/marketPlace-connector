@@ -14,7 +14,7 @@ final class OnStartedTask
     }
 
     public function handle(TaskStarted $event): void
-    {
+    {        
         logger('onStarted::task', ['id' => $event->task->id]);
         FetchPagesJob::dispatch($event->task->id);
     }

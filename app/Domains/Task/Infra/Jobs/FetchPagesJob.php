@@ -22,18 +22,11 @@ class FetchPagesJob implements ShouldQueue
 
     public function handle(FetchPagesUseCase $useCase): void
     {
-        try {
-            $useCase->execute($this->taskId, $this->page);
-        } catch (\Throwable $exception) {
-            // $this->importTask->update(['status' => 'failed', 'finished_at' => now()]);
-            // Log::error(
-            //     'StartImportOffersJob::Error importing offers from marketplace.',
-            //     [
-            //         'importTaskId' => $this->importTask->id,
-            //         'error' => $exception->getMessage(),
-            //     ]
-            // );
-            throw $exception;
-        }
+        $useCase->execute($this->taskId, $this->page);
+    }
+
+    public function failed(): void
+    {
+        logger('FetchPagesJob::failed', ['taskId' => $this->taskId]);
     }
 }

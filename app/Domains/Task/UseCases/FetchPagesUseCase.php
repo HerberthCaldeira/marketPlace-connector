@@ -32,7 +32,7 @@ class FetchPagesUseCase implements IUseCase
                 'status'      => 'pending',
             ]);
         }
-
+        
         $this->eventDispatcher->dispatch(new FetchedPagesEvent($taskId));
     }
 }

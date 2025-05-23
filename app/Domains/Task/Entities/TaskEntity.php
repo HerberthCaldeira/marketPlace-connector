@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Domains\Task\Entities;
 
@@ -12,12 +12,20 @@ use App\Domains\Task\Entities\States\Task\TaskStartedState;
 class TaskEntity
 {
     public function __construct(
-        public int $id,
+        public ?int $id,
         public ?\DateTimeInterface $startedAt,
         public ?\DateTimeInterface $finishedAt,
-        private ?ITaskState $status = null //must be private for state should be only access by getState()
-    ) {
-        $this->status = $status ?? new TaskStartedState($this);
+        private ?ITaskState $status = null
+    ) {}
+    
+    public static function create(): self
+    {
+        $startedAt = new \DateTimeImmutable();
+        $finishedAt = null;
+        $task = new self(null, $startedAt, $finishedAt, null);
+        $task->setState(new TaskStartedState($task));
+        
+        return $task;
     }
 
     public function getState(): ITaskState

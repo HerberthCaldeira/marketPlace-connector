@@ -18,12 +18,11 @@ class StartTaskController
 {
     public function __invoke(Request $request, StartTaskUseCase $startTaskUseCase)
     {
-        $startTaskUseCase->execute(
-            []
-        );
+        $task = $startTaskUseCase->execute();
 
         return response()->json([
             'message' => 'Task job dispatched',
+            'task'    => $task,
         ]);
     }
 }

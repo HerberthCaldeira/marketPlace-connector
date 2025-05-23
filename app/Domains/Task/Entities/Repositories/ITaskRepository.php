@@ -8,5 +8,5 @@ use App\Domains\Task\Entities\TaskEntity;
 
 interface ITaskRepository
 {
-    public function create(array $data): TaskEntity;
+    public function create(TaskEntity $task): TaskEntity;
 }

@@ -30,4 +30,18 @@ class TaskRepository implements ITaskRepository
 
         return $taskEntity;
     }
+
+    public function getById(int $id): TaskEntity
+    {
+        $taskModel = Task::find($id);
+        $taskEntity = new TaskEntity(
+            $taskModel->id,
+            new \DateTimeImmutable($taskModel->started_at->format('Y-m-d H:i:s')),
+            $taskModel->finished_at ? new \DateTimeImmutable($taskModel->finished_at->format('Y-m-d H:i:s')) : null
+        );
+        $taskEntity->setState(
+            TaskStateFactory::create($taskEntity, $taskModel->status)
+        );
+        return $taskEntity;
+    }
 }

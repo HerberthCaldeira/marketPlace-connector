@@ -22,17 +22,16 @@ class FetchOffersReferencesOfaPageJob implements ShouldQueue
 
     public function handle(FetchOffersReferencesOfaPageUseCase $useCase): void
     {
-        try {
-            $useCase->execute($this->pageId);
-        } catch (\Throwable $exception) {
-            Log::error(
-                'FetchPageOffersJob::Error importing offers from marketplace.',
-                [
+        $useCase->execute($this->pageId);
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error(
+            'FetchPageOffersJob::Error importing offers from marketplace.',
+            [
                     'error' => $exception->getMessage(),
                 ]
             );
-
-            throw $exception;
-        }
     }
 }

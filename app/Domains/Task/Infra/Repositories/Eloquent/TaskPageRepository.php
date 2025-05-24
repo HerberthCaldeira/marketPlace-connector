@@ -10,17 +10,19 @@ use App\Domains\Task\Infra\Models\Page;
 
 class TaskPageRepository implements ITaskPageRepository
 {
-    public function create(array $data): PageEntity
+    public function create(PageEntity $pageEntity): PageEntity
     {
-        $pageModel = Page::create($data);
+        $pageModel = Page::create([
+            "task_id" => $pageEntity->taskId,
+            "page_number" => $pageEntity->pageNumber,
+            "status" => $pageEntity->status,
+        ]);
 
         $pageEntity = new PageEntity(
             $pageModel->id,
             $pageModel->task_id,
             $pageModel->page_number,
             $pageModel->status,
-            $pageModel->started_at,
-            $pageModel->finished_at
         );
 
         return $pageEntity;
@@ -39,8 +41,6 @@ class TaskPageRepository implements ITaskPageRepository
             $pageModel->task_id,
             $pageModel->page_number,
             $pageModel->status,
-            $pageModel->started_at,
-            $pageModel->finished_at
         );
     }
 
@@ -60,28 +60,27 @@ class TaskPageRepository implements ITaskPageRepository
             $pageModel->task_id,
             $pageModel->page_number,
             $pageModel->status,
-            $pageModel->started_at,
-            $pageModel->finished_at
         ))->toArray();
 
         return $pageEntities;
     }
 
-    public function update(int $id, array $data): PageEntity
+    public function update(PageEntity $pageEntity): PageEntity
     {
-        Page::query()->where('id', $id)->update($data);
+        Page::query()->where('id', $pageEntity->id)->update([
+            'status' => $pageEntity->status,
+        ]);
 
-        $pageModel = Page::query()->where('id', $id)->first();
+        $pageModel = Page::query()->where('id', $pageEntity->id)->first();
 
         $pageEntity = new PageEntity(
             $pageModel->id,
             $pageModel->task_id,
             $pageModel->page_number,
             $pageModel->status,
-            $pageModel->started_at,
-            $pageModel->finished_at
         );
 
         return $pageEntity;
     }
 }
+    

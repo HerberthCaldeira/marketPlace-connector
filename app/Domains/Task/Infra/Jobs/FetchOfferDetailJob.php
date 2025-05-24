@@ -22,17 +22,16 @@ class FetchOfferDetailJob implements ShouldQueue
 
     public function handle(FetchOfferDetailUseCase $useCase): void
     {
-        try {
-            $useCase->execute($this->offerId);
-        } catch (\Throwable $exception) {
-            Log::error(
-                'FetchOfferDetailJob::Error importing offer from marketplace.',
-                [
-                    'error' => $exception->getMessage(),
-                ]
-            );
+        $useCase->execute($this->offerId);
+    }
 
-            throw $exception;
-        }
+    public function failed(\Throwable $exception): void
+    {
+        Log::error(
+            'FetchOfferDetailJob::Error importing offer from marketplace.',
+            [
+                'error' => $exception->getMessage(),
+            ]
+        );
     }
 }

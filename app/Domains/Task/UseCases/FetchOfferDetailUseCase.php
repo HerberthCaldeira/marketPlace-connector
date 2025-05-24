@@ -20,14 +20,17 @@ class FetchOfferDetailUseCase
 
     public function execute(int $offerId): void
     {
-        $offer = $this->taskOfferRepository->getById($offerId);
-        $data  = $this->marketingPlaceClient->getOffer($offer->reference);
+        $offerEntity = $this->taskOfferRepository->getById($offerId);
+        $data  = $this->marketingPlaceClient->getOffer($offerEntity->reference);
 
-        $this->taskOfferRepository->update($offerId, [
-            'payload' => $data['data'],
-            'status'  => 'fetched',
-        ]);
+        $offerEntity->payload = $data['data'];
+        $offerEntity->status = 'fetched';
 
+        $this->taskOfferRepository->update($offerEntity);
+
+        /**
+         * @see App\Domains\Task\Infra\Listeners\OnFetchedOfferDetail
+         */
         $this->eventDispatcher->dispatch(new FetchedOfferDetailEvent($offerId));
     }
 }

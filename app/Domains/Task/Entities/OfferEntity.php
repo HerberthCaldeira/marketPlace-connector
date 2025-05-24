@@ -7,7 +7,7 @@ namespace App\Domains\Task\Entities;
 class OfferEntity
 {
     public function __construct(
-        public int $id,
+        public ?int $id,
         public int $taskId,
         public int $taskPageId,
         public string $reference,
@@ -16,5 +16,26 @@ class OfferEntity
         public ?\DateTimeInterface $sentAt,
         public ?string $errorMessage,
     ) {
+    }
+
+    public static function create(
+        int $taskId,
+        int $taskPageId,
+        string $reference,
+        string $status,
+        ?array $payload = null,
+        ?\DateTimeInterface $sentAt = null,
+        ?string $errorMessage = null,
+    ) {
+        return new self(
+            null,
+            $taskId,
+            $taskPageId,
+            $reference,
+            $status,
+            $payload,
+            $sentAt,
+            $errorMessage,
+        );
     }
 }

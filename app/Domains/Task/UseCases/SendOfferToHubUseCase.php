@@ -22,9 +22,13 @@ class SendOfferToHubUseCase
 
             $this->hubClient->sendOffer($offerEntity->payload);
 
-            $this->taskOfferRepository->update($offerId, ['status' => 'completed']);
+            $offerEntity->status = 'completed';
+
+            $this->taskOfferRepository->update($offerEntity);
         } catch (\Throwable $exception) {
-            $this->taskOfferRepository->update($offerId, ['status' => 'failed']);
+            $offerEntity->status = 'failed';
+
+            $this->taskOfferRepository->update($offerEntity);
 
             throw $exception;
         }

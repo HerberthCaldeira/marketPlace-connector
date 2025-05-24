@@ -10,9 +10,17 @@ use App\Domains\Task\Infra\Models\Offer;
 
 class TaskOfferRepository implements ITaskOfferRepository
 {
-    public function create(array $data): OfferEntity
+    public function create(OfferEntity $offerEntity): OfferEntity
     {
-        $offerModel = Offer::create($data);
+        $offerModel = Offer::create([
+            'task_id'      => $offerEntity->taskId,
+            'task_page_id' => $offerEntity->taskPageId,
+            'reference'    => $offerEntity->reference,
+            'status'       => $offerEntity->status,
+            'payload'      => $offerEntity->payload,
+            'sent_at'      => $offerEntity->sentAt,
+            'error_message' => $offerEntity->errorMessage,
+        ]);
 
         $offerEntity = new OfferEntity(
             $offerModel->id,
@@ -73,11 +81,14 @@ class TaskOfferRepository implements ITaskOfferRepository
         return $entities;
     }
 
-    public function update(int $id, array $data): OfferEntity
+    public function update(OfferEntity $offerEntity): OfferEntity
     {
-        Offer::query()->where('id', $id)->update($data);
+        Offer::query()->where('id', $offerEntity->id)->update([
+            'payload' => $offerEntity->payload,
+            'status'  => $offerEntity->status,
+        ]);
 
-        $model = Offer::query()->where('id', $id)->first();
+        $model = Offer::query()->where('id', $offerEntity->id)->first();
 
         $entity = new OfferEntity(
             $model->id,

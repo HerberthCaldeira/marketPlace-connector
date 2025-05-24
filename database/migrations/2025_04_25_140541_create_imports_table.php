@@ -25,11 +25,8 @@ return new class () extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->unsignedInteger('page_number');
-            $table->string('status')->default('pending');
-            $table->timestamp('started_at')->nullable();
-            $table->timestamp('finished_at')->nullable();
+            $table->string('status')->default('pending');    
             $table->timestamps();
-
             $table->unique(['task_id', 'page_number']);
         });
 

@@ -7,8 +7,10 @@ namespace App\Domains\Task\UseCases;
 use App\Domains\SharedKernel\Events\Dispatcher\IEventDispatcher;
 use App\Domains\Task\Entities\Events\FetchedOffersReferencesFromPageEvent;
 use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
+use App\Domains\Task\Entities\OfferEntity;
 use App\Domains\Task\Entities\Repositories\ITaskOfferRepository;
 use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
+use Illuminate\Support\Facades\DB;
 
 class FetchOffersReferencesOfaPageUseCase
 {
@@ -22,22 +24,29 @@ class FetchOffersReferencesOfaPageUseCase
 
     public function execute(int $pageId): void
     {
-        $pageEntity = $this->taskPageRepository->getById($pageId);
+        DB::transaction(function () use ($pageId) {
+            $pageEntity = $this->taskPageRepository->getById($pageId);
 
-        $pageOffers = $this->marketingPlaceClient->getPage($pageEntity->pageNumber);
-        $offers     = collect($pageOffers['data']['offers']);
+            $pageOffers = $this->marketingPlaceClient->getPage($pageEntity->pageNumber);
+            $offers     = collect($pageOffers['data']['offers']);
 
-        foreach ($offers as $offer) {
-            $this->taskOfferRepository->create([
-                'task_id'      => $pageEntity->taskId,
-                'task_page_id' => $pageEntity->id,
-                'reference'    => $offer,
-                'status'       => 'pending',
-            ]);
-        }
+            foreach ($offers as $offer) {
+                $this->taskOfferRepository->create(OfferEntity::create(
+                    $pageEntity->taskId,
+                    $pageEntity->id,
+                    $offer,
+                    'pending',
+                ));
+            }
 
-        $this->taskPageRepository->update($pageId, ['status' => 'completed']);
+            $pageEntity->status = 'fetched';
 
-        $this->eventDispatcher->dispatch(new FetchedOffersReferencesFromPageEvent($pageEntity->id));
+            $this->taskPageRepository->update($pageEntity);
+
+            /**
+             * @see App\Domains\Task\Infra\Listeners\OnFetchedOffersReferencesFromPage
+             */
+            $this->eventDispatcher->dispatch(new FetchedOffersReferencesFromPageEvent($pageEntity->id));
+        });
     }
 }

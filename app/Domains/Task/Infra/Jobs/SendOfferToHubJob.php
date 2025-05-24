@@ -22,14 +22,13 @@ class SendOfferToHubJob implements ShouldQueue
 
     public function handle(SendOfferToHubUseCase $useCase): void
     {
-        try {
-            $useCase->execute($this->offerId);
-        } catch (\Throwable $exception) {
-            Log::error('SendOfferToHubJob::Error sending offer to hub', [
-                'error' => $exception->getMessage(),
-            ]);
+        $useCase->execute($this->offerId);
+    }
 
-            throw $exception;
-        }
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('SendOfferToHubJob::Error sending offer to hub', [
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

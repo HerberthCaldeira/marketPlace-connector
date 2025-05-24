@@ -9,4 +9,5 @@ use App\Domains\Task\Entities\TaskEntity;
 interface ITaskRepository
 {
     public function create(TaskEntity $task): TaskEntity;
+    public function getById(int $id): TaskEntity;
 }

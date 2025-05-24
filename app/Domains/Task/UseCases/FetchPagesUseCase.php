@@ -8,12 +8,15 @@ use App\Domains\SharedKernel\Contracts\IUseCase;
 use App\Domains\SharedKernel\Events\Dispatcher\IEventDispatcher;
 use App\Domains\Task\Entities\Events\FetchedPagesEvent;
 use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
+use App\Domains\Task\Entities\PageEntity;
 use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
+use App\Domains\Task\Entities\Repositories\ITaskRepository;
 
 class FetchPagesUseCase implements IUseCase
 {
     public function __construct(
         private readonly IMarketingPlaceClient $marketingPlaceClient,
+        private readonly ITaskRepository $taskRepository,
         private readonly ITaskPageRepository $taskPageRepository,
         private readonly IEventDispatcher $eventDispatcher
     ) {
@@ -25,14 +28,15 @@ class FetchPagesUseCase implements IUseCase
         $pagination = $pageOffers['pagination'];
         $totalPages = $pagination['total_pages'];
 
+        $taskEntity = $this->taskRepository->getById($taskId);
+
         for ($currentPage = $page; $currentPage <= $totalPages; $currentPage++) {
-            $this->taskPageRepository->create([
-                'task_id'     => $taskId,
-                'page_number' => $currentPage,
-                'status'      => 'pending',
-            ]);
+            $this->taskPageRepository->create(PageEntity::create($taskEntity, $currentPage));
         }
         
+        /**
+         * @see App\Domains\Task\Infra\Listeners\OnFetchedPages
+         */
         $this->eventDispatcher->dispatch(new FetchedPagesEvent($taskId));
     }
 }

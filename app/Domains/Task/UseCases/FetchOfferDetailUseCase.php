@@ -8,8 +8,9 @@ use App\Domains\SharedKernel\Events\Dispatcher\IEventDispatcher;
 use App\Domains\Task\Entities\Events\FetchedOfferDetailEvent;
 use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
 use App\Domains\Task\Entities\Repositories\ITaskOfferRepository;
+use App\Domains\SharedKernel\Contracts\IUseCase;
 
-class FetchOfferDetailUseCase
+class FetchOfferDetailUseCase implements IUseCase
 {
     public function __construct(
         private readonly IMarketingPlaceClient $marketingPlaceClient,

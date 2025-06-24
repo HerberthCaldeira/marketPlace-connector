@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domains\Task\UseCases;
 
+use App\Domains\SharedKernel\Contracts\IUseCase;
 use App\Domains\SharedKernel\Events\Dispatcher\IEventDispatcher;
 use App\Domains\Task\Entities\Events\FetchedOffersReferencesFromPageEvent;
 use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
@@ -13,7 +14,7 @@ use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
 use App\Domains\Task\Entities\States\TaskPage\TaskPageFetchedState;
 use Illuminate\Support\Facades\DB;
 
-class FetchOffersReferencesOfaPageUseCase
+class FetchOffersReferencesOfaPageUseCase implements IUseCase
 {
     public function __construct(
         private readonly IMarketingPlaceClient $marketingPlaceClient,

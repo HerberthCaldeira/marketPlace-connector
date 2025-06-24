@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Domains\Task\UseCases;
 
+use App\Domains\SharedKernel\Contracts\IUseCase;
 use App\Domains\Task\Entities\Gateways\IHubClient;
 use App\Domains\Task\Entities\Repositories\ITaskOfferRepository;
 
-class SendOfferToHubUseCase
+class SendOfferToHubUseCase implements IUseCase
 {
     public function __construct(
         private readonly IHubClient $hubClient,

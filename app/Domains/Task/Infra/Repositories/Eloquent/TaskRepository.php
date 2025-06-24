@@ -13,7 +13,7 @@ class TaskRepository implements ITaskRepository
 {
     public function create(TaskEntity $task): TaskEntity
     {
-        $taskModel = Task::create([
+        $taskModel = Task::query()->create([
             "status" => $task->getState()->getStateName(),
             "started_at" => $task->startedAt->format('Y-m-d H:i:s'),
         ]);
@@ -21,7 +21,7 @@ class TaskRepository implements ITaskRepository
         $taskEntity = new TaskEntity(
             $taskModel->id,
             new \DateTimeImmutable($taskModel->started_at->format('Y-m-d H:i:s')),
-            $taskModel->finished_at ? new \DateTimeImmutable($taskModel->finished_at->format('Y-m-d H:i:s')) : null
+            blank($taskModel->finished_at) ? null : new \DateTimeImmutable($taskModel->finished_at->format('Y-m-d H:i:s'))
         );
 
         $taskEntity->setState(
@@ -33,11 +33,11 @@ class TaskRepository implements ITaskRepository
 
     public function getById(int $id): TaskEntity
     {
-        $taskModel = Task::find($id);
+        $taskModel = Task::query()->find($id);
         $taskEntity = new TaskEntity(
             $taskModel->id,
             new \DateTimeImmutable($taskModel->started_at->format('Y-m-d H:i:s')),
-            $taskModel->finished_at ? new \DateTimeImmutable($taskModel->finished_at->format('Y-m-d H:i:s')) : null
+            blank($taskModel->finished_at) ? null : new \DateTimeImmutable($taskModel->finished_at->format('Y-m-d H:i:s'))
         );
         $taskEntity->setState(
             TaskStateFactory::create($taskEntity, $taskModel->status)

@@ -12,7 +12,7 @@ class TaskOfferRepository implements ITaskOfferRepository
 {
     public function create(OfferEntity $offerEntity): OfferEntity
     {
-        $offerModel = Offer::create([
+        $offerModel = Offer::query()->create([
             'task_id'      => $offerEntity->taskId,
             'task_page_id' => $offerEntity->taskPageId,
             'reference'    => $offerEntity->reference,
@@ -29,7 +29,7 @@ class TaskOfferRepository implements ITaskOfferRepository
             $offerModel->reference,
             $offerModel->status,
             $offerModel->payload,
-            $offerModel->sent_at,
+            $offerModel->sent_at ? \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $offerModel->sent_at) : null,
             $offerModel->error_message
         );
 
@@ -51,7 +51,7 @@ class TaskOfferRepository implements ITaskOfferRepository
             $model->reference,
             $model->status,
             $model->payload,
-            $model->sent_at,
+            $model->sent_at ? \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->sent_at): null,
             $model->error_message
         );
     }
@@ -74,7 +74,7 @@ class TaskOfferRepository implements ITaskOfferRepository
             $model->reference,
             $model->status,
             $model->payload,
-            $model->sent_at,
+            $model->sent_at ? \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->sent_at): null,
             $model->error_message
         ))->toArray();
 
@@ -97,7 +97,7 @@ class TaskOfferRepository implements ITaskOfferRepository
             $model->reference,
             $model->status,
             $model->payload,
-            $model->sent_at,
+            $model->sent_at ? \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $model->sent_at): null,
             $model->error_message
         );
 

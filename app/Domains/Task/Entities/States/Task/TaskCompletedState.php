@@ -8,7 +8,10 @@ use App\Domains\Task\Entities\TaskEntity;
 
 class TaskCompletedState implements ITaskState
 {
-    public function __construct(private readonly TaskEntity $task)
+    /**
+     * @phpstan-ignore-next-line
+     */
+    public function __construct(private TaskEntity $task)
     {
     }
 

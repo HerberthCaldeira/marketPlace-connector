@@ -8,9 +8,7 @@ use App\Domains\Task\Entities\TaskEntity;
 
 class TaskStartedState implements ITaskState
 {
-    public function __construct(private readonly TaskEntity $task)
-    {
-    }
+    public function __construct(private readonly TaskEntity $task){}
 
     public function getStateName(): string
     {

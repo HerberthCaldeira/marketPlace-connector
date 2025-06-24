@@ -23,7 +23,7 @@ class TaskFailedState implements ITaskState
     }
 
     public function completed(): void
-    {
+    {     
         $this->task->setState(new TaskCompletedState($this->task));
     }
 

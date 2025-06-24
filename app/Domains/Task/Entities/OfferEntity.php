@@ -26,7 +26,7 @@ class OfferEntity
         ?array $payload = null,
         ?\DateTimeInterface $sentAt = null,
         ?string $errorMessage = null,
-    ) {
+    ): OfferEntity {
         return new self(
             null,
             $taskId,

@@ -9,7 +9,8 @@ use App\Domains\Task\Entities\TaskEntity;
 class TaskStarted
 {
     public function __construct(
-        public readonly TaskEntity $task
+        public readonly TaskEntity $task,
+        public readonly ?int $page = 1
     ) {
     }
 }

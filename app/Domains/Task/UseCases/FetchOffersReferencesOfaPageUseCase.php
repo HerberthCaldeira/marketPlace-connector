@@ -10,6 +10,7 @@ use App\Domains\Task\Entities\Gateways\IMarketingPlaceClient;
 use App\Domains\Task\Entities\OfferEntity;
 use App\Domains\Task\Entities\Repositories\ITaskOfferRepository;
 use App\Domains\Task\Entities\Repositories\ITaskPageRepository;
+use App\Domains\Task\Entities\States\TaskPage\TaskPageFetchedState;
 use Illuminate\Support\Facades\DB;
 
 class FetchOffersReferencesOfaPageUseCase
@@ -39,7 +40,7 @@ class FetchOffersReferencesOfaPageUseCase
                 ));
             }
 
-            $pageEntity->status = 'fetched';
+            $pageEntity->setState(new TaskPageFetchedState($pageEntity));
 
             $this->taskPageRepository->update($pageEntity);
 

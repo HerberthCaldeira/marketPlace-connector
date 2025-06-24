@@ -26,8 +26,9 @@ class SendOfferToHubUseCase
 
             $this->taskOfferRepository->update($offerEntity);
         } catch (\Throwable $exception) {
+            
+            $offerEntity = $this->taskOfferRepository->getById($offerId);
             $offerEntity->status = 'failed';
-
             $this->taskOfferRepository->update($offerEntity);
 
             throw $exception;
